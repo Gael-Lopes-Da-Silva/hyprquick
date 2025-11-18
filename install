@@ -1,0 +1,81 @@
+#!/bin/bash
+
+set -e          # Exit immediately if a command fails
+set -u          # Treat unset variables as errors
+set -o pipefail # Prevent errors in a pipeline from being masked
+
+REPO_URL="https://github.com/Gael-Lopes-Da-Silva/hyprshewwll.git"
+INSTALL_DIR="$HOME/.config/hypr/hyprshewwll"
+
+PACKAGES=(
+    # AUR
+    eww-git               # Widget framework
+    awww-git              # Animated wallpaper
+
+    # Core packages
+    brightnessctl         # Monitor brightness info
+    cliphist              # Clipboard history manager
+    wl-clipboard          # Wayland clipboard support
+    ddcutil               # Monitor utils
+    gpu-screen-recorder   # Screen recorder
+    hypridle              # Idle event daemon
+    hyprlock              # Screen locking
+    hyprpicker            # Color picker
+    hyprshot              # Screenshot utils
+    hyprsunset            # Blue light filter
+    libnotify             # Notification library
+    playerctl             # Music player daemon
+    uwsm                  # Wayland session manager
+    upower                # Battery informations utils
+    power-profiles-daemon # Power profiles
+    imagemagick           # Image utility tools
+    tesseract             # OCR utils
+)
+
+# Prevent running the script as root
+if [ "$(id -u)" -eq 0 ]; then
+    echo "[ERROR] Please do not run this script as root."
+    exit 1
+fi
+
+# Clone or update the repository
+if [ -d "$INSTALL_DIR" ]; then
+    echo "[INFO] Updating hyprshewwll"
+    git -C "$INSTALL_DIR" pull
+else
+    echo "[INFO] Cloning hyprshewwll"
+    git clone --depth=1 "$REPO_URL" "$INSTALL_DIR"
+fi
+
+# Copy local fonts if not already present
+if [ ! -d "$HOME/.fonts/SymbolsNerdFont" ]; then
+  echo "[INFO] Copying local fonts to $HOME/.fonts/SymbolsNerdFont..."
+  mkdir -p "$HOME/.fonts/SymbolsNerdFont"
+  cp -r "$INSTALL_DIR/assets/fonts/"* "$HOME/.fonts"
+else
+  echo "[INFO] Local fonts are already installed. Skipping copy."
+fi
+
+# Check if yay exists, otherwise use paru
+DEFAULT_AUR="paru"
+if command -v yay &>/dev/null; then
+    DEFAULT_AUR="yay"
+elif ! command -v paru &>/dev/null; then
+    echo "[INFO] Installing paru..."
+    TEMP_DIR=$(mktemp -d)
+    git clone --depth=1 https://aur.archlinux.org/paru.git "$TEMP_DIR/paru"
+    (cd "$TEMP_DIR/paru" && makepkg -si --noconfirm)
+    rm -rf "$TEMP_DIR"
+fi
+
+# Install required packages using the detected AUR helper
+echo "[INFO] Installing required packages..."
+$DEFAULT_AUR -Syy --needed --devel --noconfirm "${PACKAGES[@]}" || true
+
+echo "[INFO] Starting hyprshewwll"
+eww daemon 2>/dev/null || true
+killall hyprshewwll 2>/dev/null || true
+uwsm app -- eww open all >/dev/null 2>&1 &
+disown
+
+echo "[DONE] Installation complete."
