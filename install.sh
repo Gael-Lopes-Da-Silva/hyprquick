@@ -4,15 +4,12 @@ set -e          # Exit immediately if a command fails
 set -u          # Treat unset variables as errors
 set -o pipefail # Prevent errors in a pipeline from being masked
 
-REPO_URL="https://github.com/Gael-Lopes-Da-Silva/hyprshewwll.git"
-INSTALL_DIR="$HOME/.config/hypr/hyprshewwll"
+REPO_URL="https://github.com/Gael-Lopes-Da-Silva/hyprquick.git"
+INSTALL_DIR="$HOME/.config/hypr/hyprquick"
 
 PACKAGES=(
-    # AUR
-    eww-git               # Widget framework
-    awww-git              # Animated wallpaper
+    quickshell            # Widget framework
 
-    # Core packages
     brightnessctl         # Monitor brightness info
     cliphist              # Clipboard history manager
     wl-clipboard          # Wayland clipboard support
@@ -40,10 +37,10 @@ fi
 
 # Clone or update the repository
 if [ -d "$INSTALL_DIR" ]; then
-    echo "[INFO] Updating hyprshewwll"
+    echo "[INFO] Updating hyprquick"
     git -C "$INSTALL_DIR" pull
 else
-    echo "[INFO] Cloning hyprshewwll"
+    echo "[INFO] Cloning hyprquick"
     git clone --depth=1 "$REPO_URL" "$INSTALL_DIR"
 fi
 
@@ -56,38 +53,24 @@ else
   echo "[INFO] Local fonts are already installed. Skipping copy."
 fi
 
-# Check if yay exists, otherwise use paru
-DEFAULT_AUR="paru"
-if command -v yay &>/dev/null; then
-    DEFAULT_AUR="yay"
-elif ! command -v paru &>/dev/null; then
-    echo "[INFO] Installing paru..."
-    TEMP_DIR=$(mktemp -d)
-    git clone --depth=1 https://aur.archlinux.org/paru.git "$TEMP_DIR/paru"
-    (cd "$TEMP_DIR/paru" && makepkg -si --noconfirm)
-    rm -rf "$TEMP_DIR"
-fi
-
 # Linking hyprland config files
 if [ -d "$HOME/.config/hypr" ]; then
     mv "$HOME/.config/hypr" "$HOME/.config/hypr_old"
 fi
 ln -s "$INSTALL_DIR/configs"* "$HOME/.config/hypr"
 
-# Linking eww config files
-if [ -d "$HOME/.config/eww" ]; then
-    mv "$HOME/.config/eww" "$HOME/.config/eww_old"
+# Linking quickshell config files
+if [ -d "$HOME/.config/quickshell" ]; then
+    mv "$HOME/.config/quickshell" "$HOME/.config/quickshell_old"
 fi
-mkdir -p "$HOME/.config/eww"
-ln -s "$INSTALL_DIR/widgets"* "$HOME/.config/eww"
-ln -s "$INSTALL_DIR/styles"* "$HOME/.config/eww"
+ln -s "$INSTALL_DIR/modules"* "$HOME/.config/quickshell"
 
 # Install required packages using the detected AUR helper
 echo "[INFO] Installing required packages..."
-$DEFAULT_AUR -Syy --needed --devel --noconfirm "${PACKAGES[@]}" || true
+sudo pacman -Syy --needed --devel --noconfirm "${PACKAGES[@]}" || true
 
-echo "[INFO] Starting hyprshewwll"
-eww daemon 2>/dev/null || true
+echo "[INFO] Starting hyprquick"
+# eww daemon 2>/dev/null || true
 disown
 
 echo "[DONE] Installation complete."
