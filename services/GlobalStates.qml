@@ -7,5 +7,4 @@ import Quickshell
 Singleton {
     id: root
 
-    // property bool somethingOpen: false
 }

@@ -7,18 +7,34 @@ import Quickshell
 Singleton {
     id: root
 
-    property var options: QtObject {}
+    readonly property var options: QtObject {
+        readonly property var wrapper: QtObject {
+            readonly property real implicitSize: 20
+            readonly property color fillColor: "white"
+        }
 
-    property var fonts: QtObject {
-        property var bootstrapIcons: FontLoader {
-            source: "../assets/fonts/bootstrap-icons.woff2"
+        readonly property var sidebar: QtObject {
+            readonly property real implicitWidth: 50
+
+            readonly property var workspaces: QtObject {
+
+            }
         }
     }
 
-    property var icons: QtObject {
-        property string wifi: "\uF61C"
-        property string wifi_1: "\uF619"
-        property string wifi_2: "\uF61A"
-        property string wifi_off: "\uF61B"
+    readonly property var fonts: QtObject {
+        readonly property var sizes: QtObject {
+            readonly property real scale: 1
+            readonly property int small: 11 * scale
+            readonly property int smaller: 12 * scale
+            readonly property int normal: 13 * scale
+            readonly property int larger: 15 * scale
+            readonly property int large: 18 * scale
+            readonly property int extraLarge: 28 * scale
+        }
+
+        readonly property var icons: FontLoader {
+            source: Qt.resolvedUrl("../assets/fonts/MingCute.ttf")
+        }
     }
 }

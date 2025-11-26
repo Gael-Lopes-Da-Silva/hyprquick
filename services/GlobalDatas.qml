@@ -7,6 +7,4 @@ import Quickshell
 Singleton {
     id: root
 
-    // property var workspaces: []
-    // property var activeWorkspace: null
 }

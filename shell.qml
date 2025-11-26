@@ -1,8 +1,8 @@
-import "configs"
-import "modules"
-
+import QtQuick
 import Quickshell
 
+import "modules/wrapper"
+
 ShellRoot {
-    Workspaces {}
+    Wrapper {}
 }
