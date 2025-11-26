@@ -7,4 +7,5 @@ import Quickshell
 Singleton {
     id: root
 
+    property bool showSidebar: true
 }

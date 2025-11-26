@@ -2,10 +2,11 @@ import QtQuick
 import Quickshell
 import Quickshell.Wayland
 
-import "../../components"
 import "../../configs"
+import "../../components"
+import "../../services"
 
-Scope {
+Item {
     required property var screen
 
     component ExclusionZone: PanelWindow {
@@ -14,13 +15,13 @@ Scope {
         implicitHeight: 1
         mask: Region {}
 
-        WlrLayershell.namespace: "hyprquick_exclusions"
+        WlrLayershell.namespace: GlobalDatas.appId + "_exclusions"
     }
 
     id: root
 
     ExclusionZone {
-        exclusiveZone: Config.options.wrapper.implicitSize
+        exclusiveZone: Config.wrapper.implicitSize
 
         anchors {
             top: true
@@ -28,7 +29,7 @@ Scope {
     }
 
     ExclusionZone {
-        exclusiveZone: Config.options.sidebar.implicitWidth
+        exclusiveZone: GlobalStates.showSidebar ? Config.sidebar.implicitWidth : Config.wrapper.implicitSize
 
         anchors {
             left: true
@@ -36,7 +37,7 @@ Scope {
     }
 
     ExclusionZone {
-        exclusiveZone: Config.options.wrapper.implicitSize
+        exclusiveZone: Config.wrapper.implicitSize
 
         anchors {
             right: true
@@ -44,7 +45,7 @@ Scope {
     }
 
     ExclusionZone {
-        exclusiveZone: Config.options.wrapper.implicitSize
+        exclusiveZone: Config.wrapper.implicitSize
 
         anchors {
             bottom: true

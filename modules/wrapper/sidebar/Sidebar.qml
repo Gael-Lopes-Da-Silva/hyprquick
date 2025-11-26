@@ -1,18 +1,24 @@
 import QtQuick
+import QtQuick.Layouts
 import Quickshell
 
-import "../../../configs"
+Item {
+    required property var screen
 
-Rectangle {
-    color: "red"
-    implicitWidth: Config.options.sidebar.implicitWidth
+    id: root
 
-    anchors {
-        top: parent.top
-        left: parent.left
-        bottom: parent.bottom
+    ColumnLayout {
+        spacing: 4
 
-        topMargin: Config.options.wrapper.implicitSize
-        bottomMargin: Config.options.wrapper.implicitSize
+        anchors {
+            top: parent.top
+            horizontalCenter: parent.horizontalCenter
+        }
+
+        Workspaces {
+            screen: root.screen
+
+            Layout.alignment: Qt.AlignCenter
+        }
     }
 }

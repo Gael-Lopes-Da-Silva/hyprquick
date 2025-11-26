@@ -7,4 +7,5 @@ import Quickshell
 Singleton {
     id: root
 
+    readonly property string appId: "hyprquick"
 }

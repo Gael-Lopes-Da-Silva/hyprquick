@@ -5,7 +5,7 @@ import Quickshell.Wayland
 import "sidebar"
 import "../../configs"
 import "../../components"
-import "../../components/containers"
+import "../../services"
 
 Variants {
     model: Quickshell.screens
@@ -23,7 +23,7 @@ Variants {
             screen: root.modelData
             color: "transparent"
 
-            WlrLayershell.namespace: "hyprquick_wrapper"
+            WlrLayershell.namespace: GlobalDatas.appId + "_wrapper"
             WlrLayershell.exclusionMode: ExclusionMode.Ignore
 
             anchors {
@@ -44,18 +44,52 @@ Variants {
 
                 anchors {
                     fill: parent
-                    topMargin: Config.options.wrapper.implicitSize
-                    leftMargin: Config.options.sidebar.implicitWidth
-                    rightMargin: Config.options.wrapper.implicitSize
-                    bottomMargin: Config.options.wrapper.implicitSize
+                    topMargin: Config.wrapper.implicitSize
+                    leftMargin: GlobalDatas.showSidebar ? Config.sidebar.implicitWidth : Config.wrapper.implicitSize
+                    rightMargin: Config.wrapper.implicitSize
+                    bottomMargin: Config.wrapper.implicitSize
                 }
             }
 
-            Backgrounds {
-                screen: root.modelData
+            Loader {
+                active: true
+
+                anchors {
+                    fill: parent
+                }
+
+                Backgrounds {
+                    screen: root.modelData
+
+                    anchors {
+                        fill: parent
+                    }
+                }
             }
 
-            Sidebar {}
+
+            Loader {
+                active: GlobalStates.showSidebar
+
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                    bottom: parent.bottom
+
+                    topMargin: Config.wrapper.implicitSize
+                    bottomMargin: Config.wrapper.implicitSize
+                }
+
+                sourceComponent: Sidebar {
+                    screen: root.modelData
+                    implicitWidth: Config.sidebar.implicitWidth
+
+                    anchors {
+                        top: parent.top
+                        bottom: parent.bottom
+                    }
+                }
+            }
         }
     }
 }
