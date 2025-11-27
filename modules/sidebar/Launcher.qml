@@ -38,7 +38,7 @@ ColumnLayout {
 
             anchors {
                 fill: parent
-                margins: Config.sidebar.launcher.margin
+                margins: Config.sidebar.launcher.button.margin
             }
 
             Icon {
@@ -48,6 +48,7 @@ ColumnLayout {
 
                 anchors {
                     centerIn: parent
+                    alignWhenCentered: false
                 }
             }
         }

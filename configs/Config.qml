@@ -16,22 +16,22 @@ Singleton {
 
     readonly property var sidebar: QtObject {
         readonly property real implicitSize: 50
-        readonly property real topMargin: 20
-        readonly property real bottomMargin: 20
+        readonly property real topMargin: 40
+        readonly property real bottomMargin: 40
         readonly property real spacing: 20
         readonly property var launcher: QtObject {
             readonly property real radius: 100
             readonly property real size: 40
-            readonly property real margin: 4
             readonly property var button: QtObject {
+                readonly property real margin: 4
                 readonly property real iconSize: 16
             }
         }
         readonly property var power: QtObject {
             readonly property real radius: 100
             readonly property real size: 40
-            readonly property real margin: 4
             readonly property var button: QtObject {
+                readonly property real margin: 4
                 readonly property real iconSize: 16
             }
         }
@@ -40,16 +40,15 @@ Singleton {
             readonly property var windowCount: QtObject {
                 readonly property real radius: 100
                 readonly property real size: 40
-                readonly property real margin: 4
                 readonly property real iconSize: 16
                 readonly property real fontSize: 12
             }
             readonly property var indicators: QtObject {
                 readonly property real radius: 100
                 readonly property real size: 40
-                readonly property real spacing: 4
-                readonly property real margin: 4
+                readonly property real spacing: 0
                 readonly property var indicator: QtObject {
+                    readonly property real margin: 4
                     readonly property real fontSize: 12
                 }
             }

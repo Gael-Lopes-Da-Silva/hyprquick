@@ -38,7 +38,7 @@ ColumnLayout {
 
             anchors {
                 fill: parent
-                margins: Config.sidebar.power.margin
+                margins: Config.sidebar.power.button.margin
             }
 
             Icon {
@@ -48,6 +48,7 @@ ColumnLayout {
 
                 anchors {
                     centerIn: parent
+                    alignWhenCentered: false
                 }
             }
         }

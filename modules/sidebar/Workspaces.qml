@@ -30,6 +30,7 @@ ColumnLayout {
 
                 anchors {
                     centerIn: parent
+                    alignWhenCentered: false
                 }
             }
 
@@ -47,6 +48,7 @@ ColumnLayout {
 
                 anchors {
                     centerIn: parent
+                    alignWhenCentered: false
                 }
             }
 
@@ -62,7 +64,7 @@ ColumnLayout {
 
         Layout.alignment: Qt.AlignCenter
         Layout.preferredWidth: Config.sidebar.workspaces.indicators.size
-        Layout.preferredHeight: Config.sidebar.workspaces.indicators.size * Hyprland.workspaces.values.length
+        Layout.preferredHeight: (Config.sidebar.workspaces.indicators.size * Hyprland.workspaces.values.length) + (Config.sidebar.workspaces.indicators.spacing * (Hyprland.workspaces.values.length - 1))
 
         ColumnLayout {
             id: workspaces
@@ -85,7 +87,7 @@ ColumnLayout {
 
                         anchors {
                             fill: parent
-                            margins: Config.margins.extraSmall
+                            margins: Config.sidebar.workspaces.indicators.indicator.margin
                         }
 
                         Text {
@@ -95,6 +97,7 @@ ColumnLayout {
 
                             anchors {
                                 centerIn: parent
+                                alignWhenCentered: false
                             }
                         }
                     }
