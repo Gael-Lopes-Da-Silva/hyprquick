@@ -28,7 +28,10 @@ Singleton {
                 readonly property color background: "#2a2a2a"
                 readonly property var indicator: QtObject {
                     readonly property color background: "transparent"
+                    readonly property color urgent: "#6a3a3a"
+                    readonly property color specialSelected: "#4a4a4a"
                     readonly property color selected: "#3a3a3a"
+                    readonly property color specialColor: "#ffffff"
                     readonly property color color: "#ffffff"
                 }
             }

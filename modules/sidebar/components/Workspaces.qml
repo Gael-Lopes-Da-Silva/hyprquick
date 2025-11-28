@@ -84,7 +84,17 @@ ColumnLayout {
                     Layout.preferredHeight: Config.sidebar.workspaces.indicators.size
 
                     Rectangle {
-                        color: modelData.active ? Appearance.sidebar.workspaces.indicators.indicator.selected : Appearance.sidebar.workspaces.indicators.indicator.background
+                        color: {
+                            if (modelData.urgent) {
+                                return Appearance.sidebar.workspaces.indicators.indicator.urgent;
+                            } else if ((modelData.id <= 0 || modelData.id > 10) && modelData.toplevels.values.length > 0) {
+                                return Appearance.sidebar.workspaces.indicators.indicator.specialSelected;
+                            } else if (modelData.active) {
+                                return Appearance.sidebar.workspaces.indicators.indicator.selected;
+                            } else {
+                                return Appearance.sidebar.workspaces.indicators.indicator.background;
+                            }
+                        }
                         radius: Config.sidebar.workspaces.indicators.radius
 
                         anchors {
@@ -92,14 +102,41 @@ ColumnLayout {
                             margins: Config.sidebar.workspaces.indicators.indicator.margin
                         }
 
-                        Text {
-                            text: modelData.id
-                            color: Appearance.sidebar.workspaces.indicators.indicator.color
-                            font.pointSize: Config.sidebar.workspaces.indicators.indicator.fontSize
+                        Loader {
+                            active: modelData.id > 0 && modelData.id <= 10
+                            visible: modelData.id > 0 && modelData.id <= 10
+                            sourceComponent: Text {
+                                text: modelData.id
+                                color: Appearance.sidebar.workspaces.indicators.indicator.color
+                                font.pointSize: Config.sidebar.workspaces.indicators.indicator.fontSize
+
+                                anchors {
+                                    centerIn: parent
+                                    alignWhenCentered: false
+                                }
+                            }
 
                             anchors {
                                 centerIn: parent
-                                alignWhenCentered: false
+                            }
+                        }
+
+                        Loader {
+                            active: modelData.id <= 0 || modelData.id > 10
+                            visible: modelData.id <= 0 || modelData.id > 10
+                            sourceComponent: Icon {
+                                icon: GlobalIcons.asterisk_fill
+                                color: Appearance.sidebar.workspaces.indicators.indicator.specialColor
+                                font.pointSize: Config.sidebar.workspaces.indicators.indicator.specialFontSize
+
+                                anchors {
+                                    centerIn: parent
+                                    alignWhenCentered: false
+                                }
+                            }
+
+                            anchors {
+                                centerIn: parent
                             }
                         }
                     }

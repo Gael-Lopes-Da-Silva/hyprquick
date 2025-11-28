@@ -39,6 +39,7 @@ Singleton {
                 readonly property real spacing: 0
                 readonly property var indicator: QtObject {
                     readonly property real margin: 4
+                    readonly property real specialFontSize: 16
                     readonly property real fontSize: 12
                 }
             }
