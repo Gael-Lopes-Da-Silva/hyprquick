@@ -14,8 +14,8 @@ Singleton {
 
     readonly property var sidebar: QtObject {
         readonly property real implicitSize: 50
-        readonly property real topMargin: 40
-        readonly property real bottomMargin: 40
+        readonly property real topMargin: 10
+        readonly property real bottomMargin: 10
         readonly property real spacing: 20
         readonly property var power: QtObject {
             readonly property real radius: 100
@@ -72,6 +72,9 @@ Singleton {
                 readonly property real iconSize: 20
             }
         }
+    }
+
+    readonly property var drawers: QtObject {
     }
 
     readonly property var fonts: QtObject {

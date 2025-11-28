@@ -3,13 +3,11 @@ import QtQuick
 import qs.configs
 
 Text {
-    required property string icon
+    property alias icon: root.text
+    property alias size: root.font.pointSize
 
-    property real size: Config.sizes.normal
-
-    text: icon
+    id: root
     font.family: Config.fonts.icons.font.family
     font.weight: Config.fonts.icons.font.weight
     font.styleName: Config.fonts.icons.font.styleName
-    font.pointSize: size
 }
