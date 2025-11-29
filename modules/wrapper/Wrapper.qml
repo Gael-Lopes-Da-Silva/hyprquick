@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Effects
 import Quickshell
 import Quickshell.Wayland
 
@@ -32,18 +33,55 @@ Variants {
             }
 
             mask: Region {
-                x: GlobalDatas.showSidebar ? Config.sidebar.implicitSize : Config.wrapper.implicitSize
-                y: Config.wrapper.implicitSize
-                width: modelData.width - (GlobalDatas.showSidebar ? Config.sidebar.implicitSize : Config.wrapper.implicitSize) - Config.wrapper.implicitSize
-                height: modelData.height - Config.wrapper.implicitSize * 2
+                item: mask
                 intersection: Intersection.Xor
             }
 
-            Backgrounds {
-                screen: root.modelData
+            Item {
+                layer.enabled: true
+                layer.effect: MultiEffect {
+                    shadowEnabled: Config.wrapper.shadow.enabled
+                    blurMax: Config.wrapper.shadow.maxBlur
+                }
 
                 anchors {
                     fill: parent
+                }
+
+                Rectangle {
+                    color: Appearance.wrapper.background
+                    layer.enabled: true
+                    layer.effect: MultiEffect {
+                        maskSource: mask
+                        maskEnabled: true
+                        maskInverted: true
+                        maskThresholdMin: 0.5
+                        maskSpreadAtMin: 1
+                    }
+
+                    anchors {
+                        fill: parent
+                    }
+                }
+
+                Item {
+                    id: mask
+                    visible: false
+                    layer.enabled: true
+
+                    anchors {
+                        fill: parent
+                    }
+
+                    Rectangle {
+                        radius: Config.wrapper.radius
+
+                        anchors {
+                            fill: parent
+                            margins: Config.wrapper.implicitSize
+                            leftMargin: GlobalStates.showSidebar ? Config.sidebar.implicitSize : Config.wrapper.implicitSize
+                        }
+                    }
                 }
             }
         }

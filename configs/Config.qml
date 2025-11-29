@@ -10,12 +10,16 @@ Singleton {
     readonly property var wrapper: QtObject {
         readonly property real implicitSize: 20
         readonly property real radius: 30
+        readonly property var shadow: QtObject {
+            readonly property bool enabled: true
+            readonly property real maxBlur: 15
+        }
     }
 
     readonly property var sidebar: QtObject {
         readonly property real implicitSize: 50
-        readonly property real topMargin: 10
-        readonly property real bottomMargin: 10
+        readonly property real topMargin: 5
+        readonly property real bottomMargin: 5
         readonly property real spacing: 20
         readonly property var power: QtObject {
             readonly property real radius: 100
