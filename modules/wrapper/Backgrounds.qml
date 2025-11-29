@@ -12,75 +12,54 @@ import qs.modules.drawers.overview as Overview
 import qs.modules.drawers.power as Power
 import qs.modules.drawers.utilities as Utilities
 
-Item {
+Loader {
     required property var screen
 
     id: root
-
-    Loader {
-        active: true
-        visible: true
-        sourceComponent: Audio.Background {
+    active: true
+    visible: true
+    sourceComponent: Item {
+        Audio.Background {
             screen: root.screen
 
             anchors {
                 fill: parent
             }
         }
-    }
 
-    Loader {
-        active: true
-        visible: true
-        sourceComponent: Launcher.Background {
+        Launcher.Background {
             screen: root.screen
 
             anchors {
                 fill: parent
             }
         }
-    }
 
-    Loader {
-        active: true
-        visible: true
-        sourceComponent: Notifications.Background {
+        Notifications.Background {
             screen: root.screen
 
             anchors {
                 fill: parent
             }
         }
-    }
 
-    Loader {
-        active: true
-        visible: true
-        sourceComponent: Overview.Background {
+        Overview.Background {
             screen: root.screen
 
             anchors {
                 fill: parent
             }
         }
-    }
 
-    Loader {
-        active: true
-        visible: true
-        sourceComponent: Power.Background {
+        Power.Background {
             screen: root.screen
 
             anchors {
                 fill: parent
             }
         }
-    }
 
-    Loader {
-        active: true
-        visible: true
-        sourceComponent: Utilities.Background {
+        Utilities.Background {
             screen: root.screen
 
             anchors {

@@ -2,27 +2,30 @@ import QtQuick
 import QtQuick.Effects
 import Quickshell
 import Quickshell.Wayland
+import Quickshell.Hyprland
 
 import qs.configs
 import qs.services
+import qs.modules.sidebar
 
 Loader {
-    active: GlobalStates.showWrapper
-    visible: GlobalStates.showWrapper
+    id: root
+    active: GlobalStates.showWrapper && !Hyprland.focusedMonitor.activeWorkspace.hasFullscreen
+    visible: GlobalStates.showWrapper && !Hyprland.focusedMonitor.activeWorkspace.hasFullscreen
     sourceComponent: Variants {
         model: Quickshell.screens
 
         Scope {
-            id: root
+            id: wrapper
 
             required property var modelData
 
             Exclusions {
-                screen: root.modelData
+                screen: wrapper.modelData
             }
 
             PanelWindow {
-                screen: root.modelData
+                screen: wrapper.modelData
                 color: "transparent"
 
                 WlrLayershell.namespace: GlobalDatas.appId + "_wrapper"
@@ -36,8 +39,18 @@ Loader {
                 }
 
                 mask: Region {
-                    item: mask
+                    x: 0
+                    y: 0
+                    width: wrapper.modelData.width
+                    height: wrapper.modelData.height
                     intersection: Intersection.Xor
+
+                    regions: [
+                        Region {
+                            item: GlobalStates.showSidebar ? sidebar : null
+                            intersection: Intersection.Xor
+                        }
+                    ]
                 }
 
                 Item {
@@ -66,37 +79,44 @@ Loader {
                             fill: parent
                         }
                     }
+                }
 
-                    Item {
-                        id: mask
-                        visible: false
-                        layer.enabled: true
+                Item {
+                    id: mask
+                    visible: false
+                    layer.enabled: true
+
+                    anchors {
+                        fill: parent
+                    }
+
+                    Rectangle {
+                        radius: Config.wrapper.radius
 
                         anchors {
                             fill: parent
-                        }
-
-                        Rectangle {
-                            radius: Config.wrapper.radius
-
-                            anchors {
-                                fill: parent
-                                margins: Config.wrapper.implicitSize
-                                leftMargin: GlobalStates.showSidebar ? Config.sidebar.implicitSize : Config.wrapper.implicitSize
-                            }
+                            margins: Config.wrapper.implicitSize
+                            leftMargin: GlobalStates.showSidebar ? Config.sidebar.implicitSize : Config.wrapper.implicitSize
                         }
                     }
+                }
 
-                    Loader {
-                        active: true
-                        visible: true
-                        sourceComponent: Backgrounds {
-                            screen: root.modelData
+                Sidebar {
+                    id: sidebar
+                    screen: wrapper.modelData
 
-                            anchors {
-                                fill: parent
-                            }
-                        }
+                    anchors {
+                        top: parent.top
+                        left: parent.left
+                        bottom: parent.bottom
+                    }
+                }
+
+                Backgrounds {
+                    screen: wrapper.modelData
+
+                    anchors {
+                        fill: parent
                     }
                 }
             }

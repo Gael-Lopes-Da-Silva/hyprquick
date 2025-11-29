@@ -24,7 +24,6 @@ Item {
 
         onPressed: {
             GlobalStates.showWrapper = !GlobalStates.showWrapper;
-            GlobalStates.showSidebar = GlobalStates.showWrapper;
         }
     }
 }

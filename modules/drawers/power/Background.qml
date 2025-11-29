@@ -2,11 +2,15 @@ import QtQuick
 import QtQuick.Shapes
 import Quickshell
 
-Shape {
+Loader {
     required property var screen
 
     id: root
-    preferredRendererType: Shape.CurveRenderer
+    active: true
+    visible: true
+    sourceComponent: Shape {
+        preferredRendererType: Shape.CurveRenderer
 
-    ShapePath {}
+        ShapePath {}
+    }
 }

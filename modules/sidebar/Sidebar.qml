@@ -9,100 +9,81 @@ import qs.services
 import "components"
 
 Loader {
+    required property var screen
+
     id: root
     active: GlobalStates.showSidebar
     visible: GlobalStates.showSidebar
-    sourceComponent: Variants {
-        model: Quickshell.screens
+    sourceComponent: Item {
+        implicitWidth: Config.sidebar.implicitSize
 
-        Scope {
-            id: scope
+        ColumnLayout {
+            spacing: Config.sidebar.spacing
 
-            required property var modelData
+            anchors {
+                top: parent.top
+                horizontalCenter: parent.horizontalCenter
+                topMargin: Config.sidebar.topMargin
+            }
 
-            PanelWindow {
-                screen: scope.modelData
-                color: "transparent"
-                implicitWidth: Config.sidebar.implicitSize
-
-                WlrLayershell.namespace: GlobalDatas.appId + "_sidebar"
-                WlrLayershell.exclusionMode: ExclusionMode.Ignore
-
-                anchors {
-                    top: true
-                    left: true
-                    bottom: true
+            Loader {
+                active: true
+                visible: true
+                sourceComponent: Workspaces {
+                    screen: root.screen
                 }
 
-                ColumnLayout {
-                    spacing: Config.sidebar.spacing
+                Layout.alignment: Qt.AlignCenter
+            }
+        }
 
-                    anchors {
-                        top: parent.top
-                        horizontalCenter: parent.horizontalCenter
-                        topMargin: Config.sidebar.topMargin
-                    }
+        ColumnLayout {
+            spacing: Config.sidebar.spacing
 
-                    Loader {
-                        active: true
-                        visible: true
-                        sourceComponent: Workspaces {
-                            screen: scope.screen
-                        }
+            anchors {
+                bottom: parent.bottom
+                horizontalCenter: parent.horizontalCenter
+                bottomMargin: Config.sidebar.bottomMargin
+            }
 
-                        Layout.alignment: Qt.AlignCenter
-                    }
+            Loader {
+                active: true
+                visible: true
+                sourceComponent: SystemTray {
+                    screen: root.screen
                 }
 
-                ColumnLayout {
-                    spacing: Config.sidebar.spacing
+                Layout.alignment: Qt.AlignCenter
+            }
 
-                    anchors {
-                        bottom: parent.bottom
-                        horizontalCenter: parent.horizontalCenter
-                        bottomMargin: Config.sidebar.bottomMargin
-                    }
-
-                    Loader {
-                        active: true
-                        visible: true
-                        sourceComponent: SystemTray {
-                            screen: scope.screen
-                        }
-
-                        Layout.alignment: Qt.AlignCenter
-                    }
-
-                    Loader {
-                        active: true
-                        visible: true
-                        sourceComponent: Status {
-                            screen: scope.screen
-                        }
-
-                        Layout.alignment: Qt.AlignCenter
-                    }
-
-                    Loader {
-                        active: true
-                        visible: true
-                        sourceComponent: Clock {
-                            screen: scope.screen
-                        }
-
-                        Layout.alignment: Qt.AlignCenter
-                    }
-
-                    Loader {
-                        active: true
-                        visible: true
-                        sourceComponent: Power {
-                            screen: scope.screen
-                        }
-
-                        Layout.alignment: Qt.AlignCenter
-                    }
+            Loader {
+                active: true
+                visible: true
+                sourceComponent: Status {
+                    screen: root.screen
                 }
+
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            Loader {
+                active: true
+                visible: true
+                sourceComponent: Clock {
+                    screen: root.screen
+                }
+
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            Loader {
+                active: true
+                visible: true
+                sourceComponent: Power {
+                    screen: root.screen
+                }
+
+                Layout.alignment: Qt.AlignCenter
             }
         }
     }
