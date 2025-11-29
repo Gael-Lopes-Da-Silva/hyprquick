@@ -21,7 +21,6 @@ PACKAGES=(
     hyprsunset            # Blue light filter
     libnotify             # Notification library
     playerctl             # Music player daemon
-    uwsm                  # Wayland session manager
     upower                # Battery informations utils
     power-profiles-daemon # Power profiles
     imagemagick           # Image utility tools

@@ -86,6 +86,18 @@ Loader {
                             }
                         }
                     }
+
+                    Loader {
+                        active: true
+                        visible: true
+                        sourceComponent: Backgrounds {
+                            screen: root.modelData
+
+                            anchors {
+                                fill: parent
+                            }
+                        }
+                    }
                 }
             }
         }
