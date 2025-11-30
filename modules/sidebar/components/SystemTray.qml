@@ -16,12 +16,12 @@ Loader {
     visible: true
     sourceComponent: ColumnLayout {
         Rectangle {
-            radius: Config.sidebar.systemTray.radius
-            color: Appearance.sidebar.systemTray.background
+            radius: Config.general.sidebar.systemTray.radius
+            color: Config.appearance.sidebar.systemTray.background
 
             Layout.alignment: Qt.AlignCenter
             Layout.preferredHeight: systemTrayColumn.height
-            Layout.preferredWidth: Config.sidebar.systemTray.size
+            Layout.preferredWidth: Config.general.sidebar.systemTray.size
 
             ColumnLayout {
                 id: systemTrayColumn
@@ -32,21 +32,21 @@ Loader {
 
                     Item {
                         Layout.alignment: Qt.AlignCenter
-                        Layout.preferredHeight: Config.sidebar.systemTray.size
-                        Layout.preferredWidth: Config.sidebar.systemTray.size
+                        Layout.preferredHeight: Config.general.sidebar.systemTray.size
+                        Layout.preferredWidth: Config.general.sidebar.systemTray.size
 
                         Rectangle {
                             color: "transparent"
-                            radius: Config.sidebar.systemTray.radius
+                            radius: Config.general.sidebar.systemTray.radius
 
                             anchors {
                                 fill: parent
-                                margins: Config.sidebar.systemTray.button.margin
+                                margins: Config.general.sidebar.systemTray.button.margin
                             }
 
                             IconImage {
-                                implicitWidth: Config.sidebar.systemTray.button.iconSize
-                                implicitHeight: Config.sidebar.systemTray.button.iconSize
+                                implicitWidth: Config.general.sidebar.systemTray.button.iconSize
+                                implicitHeight: Config.general.sidebar.systemTray.button.iconSize
                                 source: {
                                     if (modelData.icon.includes("?path=")) {
                                         const [name, path] = modelData.icon.split("?path=");
@@ -71,7 +71,7 @@ Loader {
                                     fill: parent
                                 }
 
-                                onEntered: parent.color = Appearance.sidebar.systemTray.button.hovered
+                                onEntered: parent.color = Config.appearance.sidebar.systemTray.button.hovered
                                 onExited: parent.color = "transparent"
                                 onClicked: (event) => {
                                     if (event.button === Qt.LeftButton) {

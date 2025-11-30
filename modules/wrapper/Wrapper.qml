@@ -10,8 +10,8 @@ import qs.modules.sidebar
 
 Loader {
     id: root
-    active: GlobalStates.showWrapper && !Hyprland.focusedMonitor.activeWorkspace.hasFullscreen
-    visible: GlobalStates.showWrapper && !Hyprland.focusedMonitor.activeWorkspace.hasFullscreen
+    active: States.showWrapper && !Hyprland.focusedMonitor.activeWorkspace.hasFullscreen
+    visible: States.showWrapper && !Hyprland.focusedMonitor.activeWorkspace.hasFullscreen
     sourceComponent: Variants {
         model: Quickshell.screens
 
@@ -28,7 +28,7 @@ Loader {
                 screen: wrapper.modelData
                 color: "transparent"
 
-                WlrLayershell.namespace: GlobalDatas.appId + "_wrapper"
+                WlrLayershell.namespace: Globals.appId + "_wrapper"
                 WlrLayershell.exclusionMode: ExclusionMode.Ignore
 
                 anchors {
@@ -44,7 +44,7 @@ Loader {
 
                     regions: [
                         Region {
-                            item: GlobalStates.showSidebar ? sidebar : null
+                            item: States.showSidebar ? sidebar : null
                             intersection: Intersection.Xor
                         }
                     ]
@@ -53,8 +53,8 @@ Loader {
                 Item {
                     layer.enabled: true
                     layer.effect: MultiEffect {
-                        shadowEnabled: Config.wrapper.shadow.enabled
-                        blurMax: Config.wrapper.shadow.maxBlur
+                        shadowEnabled: Config.general.wrapper.shadow.enabled
+                        blurMax: Config.general.wrapper.shadow.maxBlur
                     }
 
                     anchors {
@@ -62,7 +62,7 @@ Loader {
                     }
 
                     Rectangle {
-                        color: Appearance.wrapper.background
+                        color: Config.appearance.wrapper.background
                         layer.enabled: true
                         layer.effect: MultiEffect {
                             maskSource: mask
@@ -88,12 +88,12 @@ Loader {
                     }
 
                     Rectangle {
-                        radius: Config.wrapper.radius
+                        radius: Config.general.wrapper.radius
 
                         anchors {
                             fill: parent
-                            margins: Config.wrapper.implicitSize
-                            leftMargin: GlobalStates.showSidebar ? Config.sidebar.implicitSize : Config.wrapper.implicitSize
+                            margins: Config.general.wrapper.implicitSize
+                            leftMargin: States.showSidebar ? Config.general.sidebar.implicitSize : Config.general.wrapper.implicitSize
                         }
                     }
                 }

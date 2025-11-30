@@ -15,25 +15,25 @@ Loader {
     visible: true
     sourceComponent: ColumnLayout {
         Rectangle {
-            radius: Config.sidebar.clock.radius
-            color: Appearance.sidebar.clock.background
+            radius: Config.general.sidebar.clock.radius
+            color: Config.appearance.sidebar.clock.background
 
             Layout.alignment: Qt.AlignCenter
             Layout.preferredHeight: clockColumn.height
-            Layout.preferredWidth: Config.sidebar.clock.size
+            Layout.preferredWidth: Config.general.sidebar.clock.size
 
             Rectangle {
                 color: "transparent"
-                radius: Config.sidebar.clock.radius
+                radius: Config.general.sidebar.clock.radius
 
                 anchors {
                     fill: parent
-                    margins: Config.sidebar.clock.button.margin
+                    margins: Config.general.sidebar.clock.button.margin
                 }
 
                 ColumnLayout {
                     id: clockColumn
-                    spacing: Config.sidebar.clock.spacing
+                    spacing: Config.general.sidebar.clock.spacing
 
                     anchors {
                         centerIn: parent
@@ -41,13 +41,13 @@ Loader {
 
                     Item {
                         Layout.alignment: Qt.AlignCenter
-                        Layout.preferredWidth: Config.sidebar.clock.size
-                        Layout.preferredHeight: Config.sidebar.clock.size
+                        Layout.preferredWidth: Config.general.sidebar.clock.size
+                        Layout.preferredHeight: Config.general.sidebar.clock.size
 
                         Icon {
-                            icon: GlobalIcons.time_fill
-                            color: Appearance.sidebar.clock.button.iconColor
-                            size: Config.sidebar.clock.button.iconSize
+                            icon: Globals.icons.time_fill
+                            color: Config.appearance.sidebar.clock.button.iconColor
+                            size: Config.general.sidebar.clock.button.iconSize
 
                             anchors {
                                 centerIn: parent
@@ -58,7 +58,7 @@ Loader {
 
                     Item {
                         Layout.alignment: Qt.AlignCenter
-                        Layout.preferredWidth: Config.sidebar.clock.size
+                        Layout.preferredWidth: Config.general.sidebar.clock.size
                         Layout.preferredHeight: clockHoursText.height
                         Layout.bottomMargin: 8
 
@@ -67,18 +67,18 @@ Loader {
                             text: {
                                 let time = "hh\nmm";
 
-                                if (Config.sidebar.clock.showSeconds) {
+                                if (Config.general.sidebar.clock.showSeconds) {
                                     time += "\nss";
                                 }
 
-                                if (Config.sidebar.clock.useTwelveHourClock) {
+                                if (Config.general.sidebar.clock.useTwelveHourClock) {
                                     time += "\nA";
                                 }
 
                                 return Qt.formatDateTime(clockHours.date, time);
                             }
-                            color: Appearance.sidebar.clock.button.color
-                            font.pointSize: Config.sidebar.clock.button.fontSize
+                            color: Config.appearance.sidebar.clock.button.color
+                            font.pointSize: Config.general.sidebar.clock.button.fontSize
 
                             anchors {
                                 centerIn: parent
@@ -87,7 +87,7 @@ Loader {
 
                             SystemClock {
                                 id: clockHours
-                                precision: Config.sidebar.clock.showSeconds ? SystemClock.Seconds : SystemClock.Minutes
+                                precision: Config.general.sidebar.clock.showSeconds ? SystemClock.Seconds : SystemClock.Minutes
                             }
                         }
                     }
@@ -101,7 +101,7 @@ Loader {
                         fill: parent
                     }
 
-                    onEntered: parent.color = Appearance.sidebar.clock.button.hovered
+                    onEntered: parent.color = Config.appearance.sidebar.clock.button.hovered
                     onExited: parent.color = "transparent"
                 }
             }

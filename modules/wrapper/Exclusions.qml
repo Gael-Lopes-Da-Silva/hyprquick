@@ -14,13 +14,13 @@ Item {
         implicitHeight: 1
         mask: Region {}
 
-        WlrLayershell.namespace: GlobalDatas.appId + "_exclusions"
+        WlrLayershell.namespace: Globals.appId + "_exclusions"
     }
 
     id: root
 
     ExclusionZone {
-        exclusiveZone: Config.wrapper.implicitSize
+        exclusiveZone: Config.general.wrapper.implicitSize
 
         anchors {
             top: true
@@ -28,7 +28,7 @@ Item {
     }
 
     ExclusionZone {
-        exclusiveZone: GlobalStates.showSidebar ? Config.sidebar.implicitSize : Config.wrapper.implicitSize
+        exclusiveZone: States.showSidebar ? Config.general.sidebar.implicitSize : Config.general.wrapper.implicitSize
 
         anchors {
             left: true
@@ -36,7 +36,7 @@ Item {
     }
 
     ExclusionZone {
-        exclusiveZone: Config.wrapper.implicitSize
+        exclusiveZone: Config.general.wrapper.implicitSize
 
         anchors {
             right: true
@@ -44,7 +44,7 @@ Item {
     }
 
     ExclusionZone {
-        exclusiveZone: Config.wrapper.implicitSize
+        exclusiveZone: Config.general.wrapper.implicitSize
 
         anchors {
             bottom: true

@@ -14,12 +14,12 @@ Loader {
     visible: true
     sourceComponent: ColumnLayout {
         Rectangle {
-            radius: Config.sidebar.status.radius
-            color: Appearance.sidebar.status.background
+            radius: Config.general.sidebar.status.radius
+            color: Config.appearance.sidebar.status.background
 
             Layout.alignment: Qt.AlignCenter
             Layout.preferredHeight: statusColumn.height
-            Layout.preferredWidth: Config.sidebar.status.size
+            Layout.preferredWidth: Config.general.sidebar.status.size
 
             ColumnLayout {
                 id: statusColumn
@@ -35,17 +35,17 @@ Loader {
 
                         Rectangle {
                             color: "transparent"
-                            radius: Config.sidebar.status.radius
+                            radius: Config.general.sidebar.status.radius
 
                             anchors {
                                 fill: parent
-                                margins: Config.sidebar.status.button.margin
+                                margins: Config.general.sidebar.status.button.margin
                             }
 
                             Icon {
-                                icon: GlobalIcons.wifi_fill
-                                color: Appearance.sidebar.status.button.color
-                                size: Config.sidebar.status.button.iconSize
+                                icon: Globals.icons.wifi_fill
+                                color: Config.appearance.sidebar.status.button.color
+                                size: Config.general.sidebar.status.button.iconSize
 
                                 anchors {
                                     centerIn: parent
@@ -61,15 +61,15 @@ Loader {
                                     fill: parent
                                 }
 
-                                onEntered: parent.color = Appearance.sidebar.status.button.hovered
+                                onEntered: parent.color = Config.appearance.sidebar.status.button.hovered
                                 onExited: parent.color = "transparent"
                             }
                         }
                     }
 
                     Layout.alignment: Qt.AlignCenter
-                    Layout.preferredHeight: Config.sidebar.status.size
-                    Layout.preferredWidth: Config.sidebar.status.size
+                    Layout.preferredHeight: Config.general.sidebar.status.size
+                    Layout.preferredWidth: Config.general.sidebar.status.size
                 }
 
                 Loader {
@@ -82,17 +82,17 @@ Loader {
 
                         Rectangle {
                             color: "transparent"
-                            radius: Config.sidebar.status.radius
+                            radius: Config.general.sidebar.status.radius
 
                             anchors {
                                 fill: parent
-                                margins: Config.sidebar.status.button.margin
+                                margins: Config.general.sidebar.status.button.margin
                             }
 
                             Icon {
-                                icon: GlobalIcons.bluetooth_fill
-                                color: Appearance.sidebar.status.button.color
-                                size: Config.sidebar.status.button.iconSize
+                                icon: Globals.icons.bluetooth_fill
+                                color: Config.appearance.sidebar.status.button.color
+                                size: Config.general.sidebar.status.button.iconSize
 
                                 anchors {
                                     centerIn: parent
@@ -108,15 +108,15 @@ Loader {
                                     fill: parent
                                 }
 
-                                onEntered: parent.color = Appearance.sidebar.status.button.hovered
+                                onEntered: parent.color = Config.appearance.sidebar.status.button.hovered
                                 onExited: parent.color = "transparent"
                             }
                         }
                     }
 
                     Layout.alignment: Qt.AlignCenter
-                    Layout.preferredHeight: Config.sidebar.status.size
-                    Layout.preferredWidth: Config.sidebar.status.size
+                    Layout.preferredHeight: Config.general.sidebar.status.size
+                    Layout.preferredWidth: Config.general.sidebar.status.size
                 }
 
                 Loader {
@@ -129,17 +129,17 @@ Loader {
 
                         Rectangle {
                             color: "transparent"
-                            radius: Config.sidebar.status.radius
+                            radius: Config.general.sidebar.status.radius
 
                             anchors {
                                 fill: parent
-                                margins: Config.sidebar.status.button.margin
+                                margins: Config.general.sidebar.status.button.margin
                             }
 
                             Icon {
-                                icon: GlobalIcons.battery_fill
-                                color: Appearance.sidebar.status.button.color
-                                size: Config.sidebar.status.button.iconSize
+                                icon: Globals.icons.battery_fill
+                                color: Config.appearance.sidebar.status.button.color
+                                size: Config.general.sidebar.status.button.iconSize
 
                                 anchors {
                                     centerIn: parent
@@ -155,15 +155,15 @@ Loader {
                                     fill: parent
                                 }
 
-                                onEntered: parent.color = Appearance.sidebar.status.button.hovered
+                                onEntered: parent.color = Config.appearance.sidebar.status.button.hovered
                                 onExited: parent.color = "transparent"
                             }
                         }
                     }
 
                     Layout.alignment: Qt.AlignCenter
-                    Layout.preferredHeight: Config.sidebar.status.size
-                    Layout.preferredWidth: Config.sidebar.status.size
+                    Layout.preferredHeight: Config.general.sidebar.status.size
+                    Layout.preferredWidth: Config.general.sidebar.status.size
                 }
             }
         }

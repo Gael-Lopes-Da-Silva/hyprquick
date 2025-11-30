@@ -8,22 +8,22 @@ Item {
     id: root
 
     GlobalShortcut {
-        appid: GlobalDatas.appId
+        appid: Globals.appId
         name: "toggle:sidebar"
         description: "Toggle sidebar"
 
         onPressed: {
-            GlobalStates.showSidebar = !GlobalStates.showSidebar;
+            States.showSidebar = !States.showSidebar;
         }
     }
 
     GlobalShortcut {
-        appid: GlobalDatas.appId
+        appid: Globals.appId
         name: "toggle:wrapper"
         description: "Toggle wrapper"
 
         onPressed: {
-            GlobalStates.showWrapper = !GlobalStates.showWrapper;
+            States.showWrapper = !States.showWrapper;
         }
     }
 }

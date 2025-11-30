@@ -8,8 +8,8 @@ import qs.services
 
 Loader {
     id: root
-    active: true
-    visible: true
+    active: !Hyprland.focusedMonitor.activeWorkspace.hasFullscreen
+    visible: !Hyprland.focusedMonitor.activeWorkspace.hasFullscreen
     sourceComponent: Variants {
         model: Quickshell.screens
 
@@ -22,7 +22,7 @@ Loader {
                 screen: wallpaper.modelData
                 color: "transparent"
 
-                WlrLayershell.namespace: GlobalDatas.appId + "_wallpaper"
+                WlrLayershell.namespace: Globals.appId + "_wallpaper"
                 WlrLayershell.exclusionMode: ExclusionMode.Ignore
                 WlrLayershell.layer: WlrLayer.Background
 
@@ -34,11 +34,12 @@ Loader {
                 }
 
                 Loader {
-                    active: !Config.wallpaper.animated
-                    visible: !Config.wallpaper.animated
+                    active: !Config.general.wallpaper.animated
+                    visible: !Config.general.wallpaper.animated
                     sourceComponent: Image {
                         asynchronous: true
-                        source: Config.wallpaper.path
+                        source: Quickshell.shellDir + "/" + Config.general.wallpaper.path
+                        fillMode: Image.PreserveAspectCrop
                     }
 
                     anchors {
@@ -47,11 +48,12 @@ Loader {
                 }
 
                 Loader {
-                    active: Config.wallpaper.animated
-                    visible: Config.wallpaper.animated
+                    active: Config.general.wallpaper.animated
+                    visible: Config.general.wallpaper.animated
                     sourceComponent: AnimatedImage {
                         asynchronous: true
-                        source: Config.wallpaper.path
+                        source: Quickshell.shellDir + "/" + Config.general.wallpaper.path
+                        fillMode: Image.PreserveAspectCrop
                     }
 
                     anchors {

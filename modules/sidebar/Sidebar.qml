@@ -12,18 +12,18 @@ Loader {
     required property var screen
 
     id: root
-    active: GlobalStates.showSidebar
-    visible: GlobalStates.showSidebar
+    active: States.showSidebar
+    visible: States.showSidebar
     sourceComponent: Item {
-        implicitWidth: Config.sidebar.implicitSize
+        implicitWidth: Config.general.sidebar.implicitSize
 
         ColumnLayout {
-            spacing: Config.sidebar.spacing
+            spacing: Config.general.sidebar.spacing
 
             anchors {
                 top: parent.top
                 horizontalCenter: parent.horizontalCenter
-                topMargin: Config.sidebar.topMargin
+                topMargin: Config.general.sidebar.topMargin
             }
 
             Workspaces {
@@ -34,12 +34,12 @@ Loader {
         }
 
         ColumnLayout {
-            spacing: Config.sidebar.spacing
+            spacing: Config.general.sidebar.spacing
 
             anchors {
                 bottom: parent.bottom
                 horizontalCenter: parent.horizontalCenter
-                bottomMargin: Config.sidebar.bottomMargin
+                bottomMargin: Config.general.sidebar.bottomMargin
             }
 
             SystemTray {

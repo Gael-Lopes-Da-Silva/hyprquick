@@ -1,4 +1,5 @@
 import QtQuick
+import Quickshell
 
 import qs.configs
 
@@ -7,7 +8,12 @@ Text {
     property alias size: root.font.pointSize
 
     id: root
-    font.family: Config.fonts.icons.font.family
-    font.weight: Config.fonts.icons.font.weight
-    font.styleName: Config.fonts.icons.font.styleName
+    font.family: iconFont.font.family
+    font.weight: iconFont.font.weight
+    font.styleName: iconFont.font.styleName
+
+    FontLoader {
+        id: iconFont
+        source: Quickshell.shellDir + "/" + Config.general.fonts.icons.path
+    }
 }
