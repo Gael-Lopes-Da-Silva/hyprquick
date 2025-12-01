@@ -1,15 +1,14 @@
 import QtQuick
 import Quickshell
 import Quickshell.Wayland
-import Quickshell.Hyprland
 
 import qs.configs
 import qs.services
 
 Loader {
     id: root
-    active: !Hyprland.focusedMonitor.activeWorkspace.hasFullscreen
-    visible: !Hyprland.focusedMonitor.activeWorkspace.hasFullscreen
+    active: !Globals.isFullscreen
+    visible: !Globals.isFullscreen
     sourceComponent: Variants {
         model: Quickshell.screens
 

@@ -1,29 +1,41 @@
 import QtQuick
 import Quickshell
-import Quickshell.Hyprland
+import Quickshell.Io
 
 import qs.services
 
 Item {
     id: root
 
-    GlobalShortcut {
-        appid: Globals.appId
-        name: "toggle:sidebar"
-        description: "Toggle sidebar"
+    IpcHandler {
+        target: "sidebar"
 
-        onPressed: {
+        function toggle() {
             States.showSidebar = !States.showSidebar;
+        }
+
+        function show() {
+            States.showSidebar = true;
+        }
+
+        function hide() {
+            States.showSidebar = false;
         }
     }
 
-    GlobalShortcut {
-        appid: Globals.appId
-        name: "toggle:wrapper"
-        description: "Toggle wrapper"
+    IpcHandler {
+        target: "wrapper"
 
-        onPressed: {
+        function toggle() {
             States.showWrapper = !States.showWrapper;
+        }
+
+        function show() {
+            States.showWrapper = true;
+        }
+
+        function hide() {
+            States.showWrapper = false;
         }
     }
 }

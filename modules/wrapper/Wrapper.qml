@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Effects
 import Quickshell
 import Quickshell.Wayland
-import Quickshell.Hyprland
 
 import qs.configs
 import qs.services
@@ -10,8 +9,8 @@ import qs.modules.sidebar
 
 Loader {
     id: root
-    active: States.showWrapper && !Hyprland.focusedMonitor.activeWorkspace.hasFullscreen
-    visible: States.showWrapper && !Hyprland.focusedMonitor.activeWorkspace.hasFullscreen
+    active: States.showWrapper && !Globals.isFullscreen
+    visible: States.showWrapper && !Globals.isFullscreen
     sourceComponent: Variants {
         model: Quickshell.screens
 
