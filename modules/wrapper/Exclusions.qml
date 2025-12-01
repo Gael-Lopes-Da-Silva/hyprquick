@@ -10,8 +10,9 @@ Item {
 
     component ExclusionZone: PanelWindow {
         screen: root.screen
-        implicitWidth: 1
-        implicitHeight: 1
+        implicitWidth: 0
+        implicitHeight: 0
+        color: "transparent"
         mask: Region {}
 
         WlrLayershell.namespace: Globals.appId + "_exclusions"

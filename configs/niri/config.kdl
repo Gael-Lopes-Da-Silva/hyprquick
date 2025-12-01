@@ -5,11 +5,10 @@ environment {
 
 // spawn-at-startup "waybar"
 spawn-sh-at-startup "quickshell -c hyprquick"
-spawn-sh-at-startup "udiskie -a -n -s"
 
 cursor {
     // xcursor-theme "breeze_cursors"
-    xcursor-size 48
+    // xcursor-size 48
 
     hide-when-typing
     hide-after-inactive-ms 1000
@@ -109,7 +108,7 @@ input {
 // https://yalter.github.io/niri/Configuration:-Layout
 layout {
     // Set gaps around windows in logical pixels.
-    gaps 16
+    gaps 20
 
     // When to center a column when changing focus, options are:
     // - "never", default behavior, focusing an off-screen column will keep at the left
@@ -287,14 +286,16 @@ window-rule {
 }
 
 window-rule {
-    geometry-corner-radius 12
+    draw-border-with-background false
+    geometry-corner-radius 10
     clip-to-geometry true
 }
 
 binds {
     Mod+Shift+C repeat=false { close-window; }
     Mod+Shift+Slash repeat=false{ show-hotkey-overlay; }
-    Mod+Enter repeat=false hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
+    Mod+Return repeat=false hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
+    Mod+BackSpace repeat=false hotkey-overlay-title="Open a Browser: firefox" { spawn "firefox"; }
     Mod+O repeat=false { toggle-overview; }
 
     Mod+B hotkey-overlay-title="" { spawn-sh "quickshell ipc -c hyprquick call sidebar toggle"; }
@@ -460,7 +461,7 @@ binds {
 
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 
-    Mod+Shift+E { quit; }
+    Mod+Shift+Q { quit; }
     Ctrl+Alt+Delete { quit; }
 
     Mod+Shift+P { power-off-monitors; }

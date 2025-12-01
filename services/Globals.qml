@@ -9,9 +9,6 @@ Singleton {
     id: root
 
     readonly property string appId: "hyprquick"
-
-    readonly property bool isFullscreen: Hyprland.focusedMonitor.activeWorkspace.hasFullscreen
-
     readonly property var icons: ({
         abs_fill: "\ue901",
         abs_line: "\ue901",

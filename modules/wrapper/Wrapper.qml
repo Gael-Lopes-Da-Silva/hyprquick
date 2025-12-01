@@ -19,10 +19,6 @@ Loader {
 
             id: wrapper
 
-            Exclusions {
-                screen: wrapper.modelData
-            }
-
             PanelWindow {
                 screen: wrapper.modelData
                 color: "transparent"
@@ -115,6 +111,10 @@ Loader {
                         fill: parent
                     }
                 }
+            }
+
+            Exclusions {
+                screen: wrapper.modelData
             }
         }
     }
