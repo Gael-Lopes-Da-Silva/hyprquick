@@ -6,11 +6,13 @@ import QtQuick
 import Quickshell
 
 import qs.modules
+import qs.services
 import qs.modules.wallpaper
 import qs.modules.wrapper
-import qs.modules.sidebar
 
 ShellRoot {
+    id: root
+
     Wallpaper {}
     Wrapper {}
 

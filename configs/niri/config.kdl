@@ -4,7 +4,7 @@ environment {
 }
 
 // spawn-at-startup "waybar"
-spawn-sh-at-startup "quickshell -c hyprquick"
+// spawn-sh-at-startup "quickshell -c hyprquick"
 
 cursor {
     // xcursor-theme "breeze_cursors"

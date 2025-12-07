@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Hyprland
 
 import qs.configs
 import qs.components
@@ -25,7 +24,7 @@ Loader {
             Layout.preferredWidth: Config.general.sidebar.workspaces.windowCount.size
 
             Icon {
-                visible: Hyprland.focusedMonitor.activeWorkspace.toplevels.values.length == 0
+                visible: Ipc.compositor.monitor?.workspace?.surfaces.length <= 0
                 icon: Globals.icons.layout_3_fill
                 color: Config.appearance.sidebar.workspaces.windowCount.color
                 size: Config.general.sidebar.workspaces.windowCount.iconSize
@@ -37,8 +36,8 @@ Loader {
             }
 
             Text {
-                visible: Hyprland.focusedMonitor.activeWorkspace.toplevels.values.length > 0
-                text: Hyprland.focusedMonitor.activeWorkspace.toplevels.values.length
+                visible: Ipc.compositor.monitor?.workspace?.surfaces.length > 0
+                text: Ipc.compositor.monitor?.workspace?.surfaces.length ?? ""
                 color: Config.appearance.sidebar.workspaces.windowCount.color
                 font.pointSize: Config.general.sidebar.workspaces.windowCount.fontSize
 
@@ -55,7 +54,7 @@ Loader {
 
             Layout.alignment: Qt.AlignCenter
             Layout.preferredWidth: Config.general.sidebar.workspaces.indicators.size
-            Layout.preferredHeight: (Config.general.sidebar.workspaces.indicators.size * Hyprland.workspaces.values.length) + (Config.general.sidebar.workspaces.indicators.spacing * (Hyprland.workspaces.values.length - 1))
+            Layout.preferredHeight: (Config.general.sidebar.workspaces.indicators.size * (Ipc.compositor.monitor?.workspaces.length ?? 1)) + (Config.general.sidebar.workspaces.indicators.spacing * ((Ipc.compositor.monitor?.workspaces.length ?? 1) - 1))
 
             ColumnLayout {
                 spacing: Config.general.sidebar.workspaces.indicators.spacing
@@ -65,7 +64,7 @@ Loader {
                 }
 
                 Repeater {
-                    model: Hyprland.workspaces
+                    model: Ipc.compositor.monitor?.workspaces
 
                     Item {
                         Layout.alignment: Qt.AlignCenter
@@ -74,9 +73,7 @@ Loader {
 
                         Rectangle {
                             color: {
-                                if (modelData.urgent) {
-                                    return Config.appearance.sidebar.workspaces.indicators.indicator.urgent;
-                                } else if ((modelData.id <= 0 || modelData.id > 10) && modelData.toplevels.values.length > 0) {
+                                if ((modelData.workspaceId <= 0 || modelData.workspaceId > 10) && modelData.surfaces.length > 0) {
                                     return Config.appearance.sidebar.workspaces.indicators.indicator.specialSelected;
                                 } else if (modelData.active) {
                                     return Config.appearance.sidebar.workspaces.indicators.indicator.selected;
@@ -91,11 +88,15 @@ Loader {
                                 margins: Config.general.sidebar.workspaces.indicators.indicator.margin
                             }
 
-                            Text {
-                                visible: modelData.id > 0 && modelData.id <= 10
-                                text: modelData.id
-                                color: Config.appearance.sidebar.workspaces.indicators.indicator.color
-                                font.pointSize: Config.general.sidebar.workspaces.indicators.indicator.fontSize
+                            Loader {
+                                active: !modelData.special
+                                visible: !modelData.special
+                                sourceComponent: Text {
+                                    visible: !modelData.special
+                                    text: modelData.name
+                                    color: Config.appearance.sidebar.workspaces.indicators.indicator.color
+                                    font.pointSize: Config.general.sidebar.workspaces.indicators.indicator.fontSize
+                                }
 
                                 anchors {
                                     centerIn: parent
@@ -103,11 +104,14 @@ Loader {
                                 }
                             }
 
-                            Icon {
-                                visible: modelData.id <= 0 || modelData.id > 10
-                                icon: Globals.icons.asterisk_fill
-                                color: Config.appearance.sidebar.workspaces.indicators.indicator.specialColor
-                                font.pointSize: Config.general.sidebar.workspaces.indicators.indicator.specialFontSize
+                            Loader {
+                                active: modelData.special
+                                visible: modelData.special
+                                sourceComponent: Icon {
+                                    icon: Globals.icons.asterisk_fill
+                                    color: Config.appearance.sidebar.workspaces.indicators.indicator.specialColor
+                                    font.pointSize: Config.general.sidebar.workspaces.indicators.indicator.specialFontSize
+                                }
 
                                 anchors {
                                     centerIn: parent

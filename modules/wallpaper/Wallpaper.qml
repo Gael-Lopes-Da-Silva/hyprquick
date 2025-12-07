@@ -7,8 +7,8 @@ import qs.services
 
 Loader {
     id: root
-    active: !Globals.isFullscreen
-    visible: !Globals.isFullscreen
+    active: !Ipc.compositor.monitor?.workspace?.fullscreen
+    visible: !Ipc.compositor.monitor?.workspace?.fullscreen
     sourceComponent: Variants {
         model: Quickshell.screens
 

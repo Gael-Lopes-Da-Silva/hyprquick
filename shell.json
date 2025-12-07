@@ -1,135 +1,135 @@
 {
-  "general": {
-    "wallpaper": {
-      "path": "./assets/wallpapers/wallpaper.png",
-      "animated": false
-    },
-    "wrapper": {
-      "implicitSize": 20,
-      "radius": 30,
-      "shadow": {
-        "enabled": true,
-        "maxBlur": 15
-      }
-    },
-    "sidebar": {
-      "implicitSize": 50,
-      "topMargin": 5,
-      "bottomMargin": 5,
-      "spacing": 20,
-      "power": {
-        "radius": 1000,
-        "size": 40,
-        "button": {
-          "margin": 4,
-          "iconSize": 16
-        }
-      },
-      "workspaces": {
-        "spacing": 4,
-        "windowCount": {
-          "radius": 1000,
-          "size": 40,
-          "iconSize": 16,
-          "fontSize": 12
+    "general": {
+        "wallpaper": {
+            "path": "./assets/wallpapers/wallpaper.png",
+            "animated": false
         },
-        "indicators": {
-          "radius": 1000,
-          "size": 40,
-          "spacing": 0,
-          "indicator": {
-            "margin": 4,
-            "specialFontSize": 16,
-            "fontSize": 12
-          }
-        }
-      },
-      "clock": {
-        "radius": 1000,
-        "size": 40,
-        "spacing": 0,
-        "showSeconds": false,
-        "useTwelveHourClock": false,
-        "button": {
-          "margin": 4,
-          "iconSize": 16,
-          "fontSize": 16
-        }
-      },
-      "status": {
-        "radius": 1000,
-        "size": 40,
-        "button": {
-          "margin": 4,
-          "iconSize": 16
-        }
-      },
-      "systemTray": {
-        "radius": 1000,
-        "size": 40,
-        "button": {
-          "margin": 4,
-          "iconSize": 20
-        }
-      }
-    },
-    "drawers": {},
-    "fonts": {
-      "icons": {
-        "path": "./assets/fonts/MingCute.ttf"
-      }
-    }
-  },
-  "appearance": {
-    "wrapper": {
-      "background": "#1a1a1a"
-    },
-    "sidebar": {
-      "power": {
-        "background": "#2a2a2a",
-        "button": {
-          "hovered": "#3a3a3a",
-          "color": "#ffffff"
-        }
-      },
-      "workspaces": {
-        "windowCount": {
-          "background": "#2a2a2a",
-          "color": "#ffffff"
+        "wrapper": {
+            "implicitSize": 20,
+            "radius": 30,
+            "shadow": {
+                "enabled": true,
+                "maxBlur": 15
+            }
         },
-        "indicators": {
-          "background": "#2a2a2a",
-          "indicator": {
-            "background": "transparent",
-            "urgent": "#6a3a3a",
-            "specialSelected": "#4a4a4a",
-            "selected": "#3a3a3a",
-            "specialColor": "#ffffff",
-            "color": "#ffffff"
-          }
+        "sidebar": {
+            "implicitSize": 50,
+            "topMargin": 5,
+            "bottomMargin": 5,
+            "spacing": 20,
+            "power": {
+                "radius": 1000,
+                "size": 40,
+                "button": {
+                    "margin": 4,
+                    "iconSize": 16
+                }
+            },
+            "workspaces": {
+                "spacing": 4,
+                "windowCount": {
+                    "radius": 1000,
+                    "size": 40,
+                    "iconSize": 16,
+                    "fontSize": 12
+                },
+                "indicators": {
+                    "radius": 1000,
+                    "size": 40,
+                    "spacing": 0,
+                    "indicator": {
+                        "margin": 4,
+                        "specialFontSize": 16,
+                        "fontSize": 12
+                    }
+                }
+            },
+            "clock": {
+                "radius": 1000,
+                "size": 40,
+                "spacing": 0,
+                "showSeconds": false,
+                "useTwelveHourClock": false,
+                "button": {
+                    "margin": 4,
+                    "iconSize": 16,
+                    "fontSize": 16
+                }
+            },
+            "status": {
+                "radius": 1000,
+                "size": 40,
+                "button": {
+                    "margin": 4,
+                    "iconSize": 16
+                }
+            },
+            "systemTray": {
+                "radius": 1000,
+                "size": 40,
+                "button": {
+                    "margin": 4,
+                    "iconSize": 20
+                }
+            }
+        },
+        "drawers": {},
+        "fonts": {
+            "icons": {
+                "path": "./assets/fonts/MingCute.ttf"
+            }
         }
-      },
-      "clock": {
-        "background": "#2a2a2a",
-        "button": {
-          "hovered": "#3a3a3a",
-          "iconColor": "#ffffff",
-          "color": "#ffffff"
+    },
+    "appearance": {
+        "wrapper": {
+            "background": "#1a1a1a"
+        },
+        "sidebar": {
+            "power": {
+                "background": "#2a2a2a",
+                "button": {
+                    "hovered": "#3a3a3a",
+                    "color": "#ffffff"
+                }
+            },
+            "workspaces": {
+                "windowCount": {
+                    "background": "#2a2a2a",
+                    "color": "#ffffff"
+                },
+                "indicators": {
+                    "background": "#2a2a2a",
+                    "indicator": {
+                        "background": "transparent",
+                        "urgent": "#6a3a3a",
+                        "specialSelected": "#4a4a4a",
+                        "selected": "#3a3a3a",
+                        "specialColor": "#ffffff",
+                        "color": "#ffffff"
+                    }
+                }
+            },
+            "clock": {
+                "background": "#2a2a2a",
+                "button": {
+                    "hovered": "#3a3a3a",
+                    "iconColor": "#ffffff",
+                    "color": "#ffffff"
+                }
+            },
+            "status": {
+                "background": "#2a2a2a",
+                "button": {
+                    "hovered": "#3a3a3a",
+                    "color": "#ffffff"
+                }
+            },
+            "systemTray": {
+                "background": "#2a2a2a",
+                "button": {
+                    "hovered": "#3a3a3a"
+                }
+            }
         }
-      },
-      "status": {
-        "background": "#2a2a2a",
-        "button": {
-          "hovered": "#3a3a3a",
-          "color": "#ffffff"
-        }
-      },
-      "systemTray": {
-        "background": "#2a2a2a",
-        "button": {
-          "hovered": "#3a3a3a"
-        }
-      }
     }
-  }
 }

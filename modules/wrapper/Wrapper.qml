@@ -9,8 +9,8 @@ import qs.modules.sidebar
 
 Loader {
     id: root
-    active: States.showWrapper && !Globals.isFullscreen
-    visible: States.showWrapper && !Globals.isFullscreen
+    active: States.showWrapper && !Ipc.compositor.monitor?.workspace?.fullscreen
+    visible: States.showWrapper && !Ipc.compositor.monitor?.workspace?.fullscreen
     sourceComponent: Variants {
         model: Quickshell.screens
 
