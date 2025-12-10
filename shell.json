@@ -1,6 +1,6 @@
 {
     "general": {
-        "compositor": "niri",
+        "compositor": "hyprland",
         "wallpaper": {
             "path": "./assets/wallpapers/wallpaper.png",
             "animated": false

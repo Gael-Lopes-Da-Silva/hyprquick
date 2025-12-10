@@ -93,7 +93,7 @@ Loader {
                                 visible: !modelData.special
                                 sourceComponent: Text {
                                     visible: !modelData.special
-                                    text: modelData.workspaceId
+                                    text: modelData.name
                                     color: Config.appearance.sidebar.workspaces.indicators.indicator.color
                                     font.pointSize: Config.general.sidebar.workspaces.indicators.indicator.fontSize
                                 }

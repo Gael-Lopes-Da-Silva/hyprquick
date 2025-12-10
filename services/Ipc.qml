@@ -14,18 +14,13 @@ Singleton {
 
     property var compositor: Compositor {
         name: Config.general.compositor
-        supported: ["hyprland", "niri"].includes(Config.general.compositor)
+        supported: ["hyprland"].includes(Config.general.compositor)
     }
 
     Component.onCompleted: {
         switch (compositor.name) {
             case "hyprland": {
                 Ipc.Hyprland.initialize();
-                break;
-            }
-
-            case "niri": {
-                Ipc.Niri.initialize();
                 break;
             }
         }
