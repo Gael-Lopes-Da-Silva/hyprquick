@@ -24,7 +24,7 @@ Loader {
             Layout.preferredWidth: Config.general.sidebar.workspaces.windowCount.size
 
             Icon {
-                visible: Ipc.compositor.monitor?.workspace?.surfaces.length <= 0
+                visible: Ipc.compositor.monitor?.workspace?.surfaceCount <= 0
                 icon: Globals.icons.layout_3_fill
                 color: Config.appearance.sidebar.workspaces.windowCount.color
                 size: Config.general.sidebar.workspaces.windowCount.iconSize
@@ -36,8 +36,8 @@ Loader {
             }
 
             Text {
-                visible: Ipc.compositor.monitor?.workspace?.surfaces.length > 0
-                text: Ipc.compositor.monitor?.workspace?.surfaces.length ?? ""
+                visible: Ipc.compositor.monitor?.workspace?.surfaceCount > 0
+                text: Ipc.compositor.monitor?.workspace?.surfaceCount ?? ""
                 color: Config.appearance.sidebar.workspaces.windowCount.color
                 font.pointSize: Config.general.sidebar.workspaces.windowCount.fontSize
 
@@ -54,7 +54,7 @@ Loader {
 
             Layout.alignment: Qt.AlignCenter
             Layout.preferredWidth: Config.general.sidebar.workspaces.indicators.size
-            Layout.preferredHeight: (Config.general.sidebar.workspaces.indicators.size * (Ipc.compositor.monitor?.workspaces.length ?? 1)) + (Config.general.sidebar.workspaces.indicators.spacing * ((Ipc.compositor.monitor?.workspaces.length ?? 1) - 1))
+            Layout.preferredHeight: (Config.general.sidebar.workspaces.indicators.size * (Ipc.compositor.monitor?.workspaceCount ?? 1)) + (Config.general.sidebar.workspaces.indicators.spacing * ((Ipc.compositor.monitor?.workspaceCount ?? 1) - 1))
 
             ColumnLayout {
                 spacing: Config.general.sidebar.workspaces.indicators.spacing
@@ -93,7 +93,7 @@ Loader {
                                 visible: !modelData.special
                                 sourceComponent: Text {
                                     visible: !modelData.special
-                                    text: modelData.name
+                                    text: modelData.workspaceId
                                     color: Config.appearance.sidebar.workspaces.indicators.indicator.color
                                     font.pointSize: Config.general.sidebar.workspaces.indicators.indicator.fontSize
                                 }

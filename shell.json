@@ -1,5 +1,6 @@
 {
     "general": {
+        "compositor": "niri",
         "wallpaper": {
             "path": "./assets/wallpapers/wallpaper.png",
             "animated": false

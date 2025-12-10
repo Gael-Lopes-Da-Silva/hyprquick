@@ -5,27 +5,318 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-import qs.services.ipc
+import qs.services
+import qs.components.ipc
 
 Singleton {
     id: root
 
+    function initialize() {
+        this.updateMonitors().then(updateWorkspaces).then(updateSurfaces);
+
+        // events.connected = true;
+    }
+
+    function updateMonitors() {
+        return root.handleRequest("Outputs", data => {
+            Ipc.compositor.monitors = reconcileList(
+                Ipc.compositor.monitors,
+                data.map(m => ({
+                    monitorId: m.id.toString(),
+                    width: m.width,
+                    height: m.height,
+                    scale: m.scale,
+                    active: m.focused,
+                    activeWorkspaceId: m.activeWorkspace.id.toString()
+                })),
+                "monitorId",
+                item => monitorFactory.createObject(null, item)
+            );
+            Ipc.compositor.monitor = Ipc.compositor.monitors.find(m => m.active) || null;
+            Ipc.compositor.monitorCount = Ipc.compositor.monitors.length;
+        });
+    }
+
+    function updateWorkspaces() {
+        return root.handleRequest("Workspaces", data => {
+            Ipc.compositor.monitors.forEach(m => {
+                m.workspaces = reconcileList(
+                    m.workspaces,
+                    data.filter(w => w.monitorID.toString() === m.monitorId).map(w => ({
+                        workspaceId: w.id.toString(),
+                        name: w.name,
+                        special: w.name === "special:magic",
+                        fullscreen: w.hasfullscreen,
+                        surfaceCount: w.windows,
+                        active: m.activeWorkspaceId === w.id.toString(),
+                        activeSurfaceId: w.lastwindow
+                    })),
+                    "workspaceId",
+                    item => workspaceFactory.createObject(null, item)
+                ).sort((a, b) => a.workspaceId - b.workspaceId);
+                m.workspace = m.workspaces.find(w => w.active) || null;
+                m.workspaceCount = m.workspaces.length;
+            });
+        });
+    }
+
+    function updateSurfaces() {
+        return root.handleRequest("Windows", data => {
+            Ipc.compositor.monitors.forEach(m =>
+                m.workspaces.forEach(w => {
+                    w.surfaces = reconcileList(
+                        w.surfaces,
+                        data.filter(s => s.workspace.id.toString() === w.workspaceId).map(s => ({
+                            surfaceId: s.address,
+                            title: s.title,
+                            fullscreen: s.fullscreen === 1,
+                            active: w.activeSurfaceId === s.address
+                        })),
+                        "surfaceId",
+                        item => surfaceFactory.createObject(null, item)
+                    );
+                    w.surface = w.surfaces.find(s => s.active) || null;
+                    w.surfaceCount = w.surfaces.length;
+                })
+            );
+        });
+    }
+
+    function reconcileList(oldList, newItems, key, factory) {
+        const result = [];
+
+        newItems.forEach(item => {
+            const old = oldList.find(x => x[key] === item[key]);
+            if (old) {
+                for (let k in item) {
+                    if (old[k] !== item[k]) {
+                        old[k] = item[k];
+                    }
+                }
+                result.push(old);
+                return;
+            }
+
+            result.push(factory(item));
+        });
+
+        return result;
+    }
+
+    function handleRequest(request, fn) {
+        return new Promise(resolve => {
+            let handler = (command, data) => {
+                if (command !== request) return;
+                requests.finished.disconnect(handler);
+                fn(data);
+                resolve();
+            };
+
+            requests.request(request);
+            requests.finished.connect(handler);
+        });
+    }
+
     Socket {
+        property var updateQueue: Promise.resolve()
+
+        signal eventReceived(string name, string data)
+
         id: events
-        connected: true
+        connected: false
         path: Quickshell.env("NIRI_SOCKET")
         parser: SplitParser {
+            onRead: (line) => {
+                // if (!line || line.length === 0) return;
+                //
+                // const chuncks = line.split(">>");
+                // const name = chuncks.length > 0 ? chuncks[0] : "";
+                // const data = chuncks.length > 1 ? chuncks[1] : "";
+                //
+                // events.eventReceived(name, data);
+            }
+        }
+
+        onConnectedChanged: if (this.connected) {
+            write(`"EventStream"\n`);
+            flush();
+        }
+
+        onEventReceived: (name, data) => {
+            this.eventHandler(name, data);
+        }
+
+        function enqueueUpdate(fn) {
+            this.updateQueue = updateQueue.then(fn).catch(error => console.error(error));
+        }
+
+        function eventHandler(name, data) {
+            // switch (name) {
+            //     case "focusedmon": {
+            //         enqueueUpdate(() => root.updateMonitors());
+            //         break;
+            //     }
+            //
+            //     case "monitoradded": {
+            //         enqueueUpdate(() => root.updateMonitors());
+            //         break;
+            //     }
+            //
+            //     case "monitorremovedv2": {
+            //         const [monitorId] = data.split(",");
+            //         let index = Ipc.compositor.monitors.findIndex(m => m.monitorId === parseInt(monitorId));
+            //         if (index >= 0) {
+            //             Ipc.compositor.monitors.splice(index, 1);
+            //             Ipc.compositor.monitorCount = Ipc.compositor.monitors.length;
+            //         }
+            //         break;
+            //     }
+            //
+            //     case "workspace": {
+            //         enqueueUpdate(() => root.updateMonitors().then(root.updateWorkspaces));
+            //         break;
+            //     }
+            //
+            //     case "activespecial": {
+            //         enqueueUpdate(() => root.updateMonitors().then(root.updateWorkspaces));
+            //         break;
+            //     }
+            //
+            //     case "renameworkspace": {
+            //         enqueueUpdate(() => root.updateWorkspaces());
+            //         break;
+            //     }
+            //
+            //     case "openwindow": {
+            //         enqueueUpdate(() => root.updateSurfaces());
+            //         break;
+            //     }
+            //
+            //     case "closewindow": {
+            //         const [surfaceId] = data.split(",");
+            //         Ipc.compositor.monitors.forEach(m =>
+            //             m.workspaces.forEach(w => {
+            //                 let index = w.surfaces.findIndex(s => s.surfaceId === `0x${surfaceId}`);
+            //                 if (index >= 0) {
+            //                     w.surfaces.splice(index, 1);
+            //                     w.surfaceCount = w.surfaces.length;
+            //                 }
+            //             })
+            //         );
+            //         break;
+            //     }
+            //
+            //     case "activewindowv2": {
+            //         const [surfaceId] = data.split(",");
+            //         Ipc.compositor.monitors.forEach(m =>
+            //             m.workspaces.forEach(w => {
+            //                 w.surfaces.forEach(s => {
+            //                     if (s.surfaceId === `0x${surfaceId}`) {
+            //                         s.urgent = false;
+            //                         w.urgent = false;
+            //                     }
+            //                     s.active = s.surfaceId === `0x${surfaceId}`;
+            //                 });
+            //                 w.surface = w.surfaces.find(s => s.active) || null;
+            //             })
+            //         );
+            //         break;
+            //     }
+            //
+            //     case "fullscreen": {
+            //         const [fullscreen] = data.split(",");
+            //         Ipc.compositor.monitor.workspace.fullscreen = fullscreen === "1";
+            //         Ipc.compositor.monitor.workspace.surface.fullscreen = fullscreen === "1";
+            //         break;
+            //     }
+            //
+            //     case "urgent": {
+            //         const [surfaceId] = data.split(",");
+            //         Ipc.compositor.monitors.forEach(m =>
+            //             m.workspaces.forEach(w =>
+            //                 w.surfaces.forEach(s => {
+            //                     if (s.surfaceId === `0x${surfaceId}`) {
+            //                         s.urgent = true;
+            //                         w.urgent = true;
+            //                     }
+            //                 })
+            //             )
+            //         );
+            //         break;
+            //     }
+            //
+            //     case "windowtitlev2": {
+            //         const [surfaceId, surfaceName] = data.split(",");
+            //         Ipc.compositor.monitors.forEach(m =>
+            //             m.workspaces.forEach(w =>
+            //                 w.surfaces.forEach(s => {
+            //                     if (s.surfaceId === `0x${surfaceId}`) {
+            //                         s.title = surfaceName;
+            //                     }
+            //                 })
+            //             )
+            //         );
+            //         break;
+            //     }
+            // }
+        }
+    }
+
+    Socket {
+        property string command: ""
+        property string output: ""
+
+        signal finished(string command, var result)
+
+        id: requests
+        connected: false
+        path: Quickshell.env("NIRI_SOCKET")
+        parser: SplitParser {
+            splitMarker: ""
             onRead: (data) => {
-                // console.log(data);
+                requests.output += data;
             }
         }
 
         onConnectedChanged: {
             if (this.connected) {
-                write("\"EventStream\"\n");
+                write(`"${command}"\n`);
                 flush();
+                return;
             }
+
+            let data = null;
+
+            try {
+                data = JSON.parse(this.output).Ok;
+            } catch (error) {}
+
+            finished(this.command, data);
         }
+
+        function request(request) {
+            this.output = "";
+            this.command = request;
+            this.connected = true;
+        }
+    }
+
+    Component {
+        id: monitorFactory
+
+        Monitor {}
+    }
+
+    Component {
+        id: workspaceFactory
+
+        Workspace {}
+    }
+
+    Component {
+        id: surfaceFactory
+
+        Surface {}
     }
 }
 

@@ -6,4 +6,5 @@ QtObject {
     property string title: ""
     property bool fullscreen: false
     property bool active: false
+    property bool urgent: false
 }

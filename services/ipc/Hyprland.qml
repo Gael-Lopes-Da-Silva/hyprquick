@@ -12,73 +12,114 @@ Singleton {
     id: root
 
     function initialize() {
-        let monitorsRequest = (monitorsCommand, monitorsData) => {
-            if (monitorsCommand !== "j/monitors") return;
-
-            requests.finished.disconnect(monitorsRequest);
-
-            Ipc.compositor.monitors = monitorsData.map(m => monitorFactory.createObject(null, {
-                monitorId: m.id,
-                width: m.width,
-                height: m.height,
-                scale: m.scale,
-                active: m.focused
-            }));
-            Ipc.compositor.monitor = Ipc.compositor.monitors.find(m => m.active) || null;
-
-            let workspacesRequest = (workspacesCommand, workspacesData) => {
-                if (workspacesCommand !== "j/workspaces") return;
-
-                requests.finished.disconnect(workspacesRequest);
-
-                Ipc.compositor.monitors.forEach(m => {
-                    m.workspaces = workspacesData
-                        .filter(w => w.monitorID === m.monitorId)
-                        .map(w => workspaceFactory.createObject(null, {
-                            workspaceId: w.id,
-                            name: w.name,
-                            special: w.name === "special:magic",
-                            fullscreen: w.hasfullscreen,
-                            active: monitorsData.find(md => md.id === m.monitorId && md.activeWorkspace.id === w.id) !== undefined
-                        }));
-                    m.workspace = m.workspaces.find(w => w.active) || null;
-                });
-
-                let surfacesRequest = (surfacesCommand, surfacesData) => {
-                    if (surfacesCommand !== "j/clients") return;
-
-                    requests.finished.disconnect(surfacesRequest)
-
-                    Ipc.compositor.monitors.forEach(m => {
-                        m.workspaces.forEach(w => {
-                            w.surfaces = surfacesData
-                                .filter(s => s.workspace.id === w.workspaceId)
-                                .map(s => surfaceFactory.createObject(null, {
-                                    surfaceId: s.address,
-                                    title: s.title,
-                                    fullscreen: s.fullscreen === 1,
-                                    active: workspacesData.find(wd => wd.id === w.workspaceId && wd.lastwindow === s.address) !== undefined
-                                }));
-                            w.surface = w.surfaces.find(s => s.active) || null;
-                        });
-                    });
-                }
-
-                requests.request("j/clients");
-                requests.finished.connect(surfacesRequest);
-            }
-
-            requests.request("j/workspaces");
-            requests.finished.connect(workspacesRequest);
-        }
-
-        requests.request("j/monitors");
-        requests.finished.connect(monitorsRequest);
+        this.updateMonitors().then(updateWorkspaces).then(updateSurfaces);
 
         events.connected = true;
     }
 
+    function updateMonitors() {
+        return root.handleRequest("j/monitors", data => {
+            Ipc.compositor.monitors = reconcileList(
+                Ipc.compositor.monitors,
+                data.map(m => ({
+                    monitorId: m.id.toString(),
+                    width: m.width,
+                    height: m.height,
+                    scale: m.scale,
+                    active: m.focused,
+                    activeWorkspaceId: m.activeWorkspace.id.toString()
+                })),
+                "monitorId",
+                item => monitorFactory.createObject(null, item)
+            );
+            Ipc.compositor.monitor = Ipc.compositor.monitors.find(m => m.active) || null;
+            Ipc.compositor.monitorCount = Ipc.compositor.monitors.length;
+        });
+    }
+
+    function updateWorkspaces() {
+        return root.handleRequest("j/workspaces", data => {
+            Ipc.compositor.monitors.forEach(m => {
+                m.workspaces = reconcileList(
+                    m.workspaces,
+                    data.filter(w => w.monitorID.toString() === m.monitorId).map(w => ({
+                        workspaceId: w.id.toString(),
+                        name: w.name,
+                        special: w.name === "special:magic",
+                        fullscreen: w.hasfullscreen,
+                        surfaceCount: w.windows,
+                        active: m.activeWorkspaceId === w.id.toString(),
+                        activeSurfaceId: w.lastwindow
+                    })),
+                    "workspaceId",
+                    item => workspaceFactory.createObject(null, item)
+                ).sort((a, b) => a.workspaceId - b.workspaceId);
+                m.workspace = m.workspaces.find(w => w.active) || null;
+                m.workspaceCount = m.workspaces.length;
+            });
+        });
+    }
+
+    function updateSurfaces() {
+        return root.handleRequest("j/clients", data => {
+            Ipc.compositor.monitors.forEach(m =>
+                m.workspaces.forEach(w => {
+                    w.surfaces = reconcileList(
+                        w.surfaces,
+                        data.filter(s => s.workspace.id.toString() === w.workspaceId).map(s => ({
+                            surfaceId: s.address,
+                            title: s.title,
+                            fullscreen: s.fullscreen === 1,
+                            active: w.activeSurfaceId === s.address
+                        })),
+                        "surfaceId",
+                        item => surfaceFactory.createObject(null, item)
+                    );
+                    w.surface = w.surfaces.find(s => s.active) || null;
+                    w.surfaceCount = w.surfaces.length;
+                })
+            );
+        });
+    }
+
+    function reconcileList(oldList, newItems, key, factory) {
+        const result = [];
+
+        newItems.forEach(item => {
+            const old = oldList.find(x => x[key] === item[key]);
+            if (old) {
+                for (let k in item) {
+                    if (old[k] !== item[k]) {
+                        old[k] = item[k];
+                    }
+                }
+                result.push(old);
+                return;
+            }
+
+            result.push(factory(item));
+        });
+
+        return result;
+    }
+
+    function handleRequest(request, fn) {
+        return new Promise(resolve => {
+            let handler = (command, data) => {
+                if (command !== request) return;
+                requests.finished.disconnect(handler);
+                fn(data);
+                resolve();
+            };
+
+            requests.request(request);
+            requests.finished.connect(handler);
+        });
+    }
+
     Socket {
+        property var updateQueue: Promise.resolve()
+
         signal eventReceived(string name, string data)
 
         id: events
@@ -97,61 +138,121 @@ Singleton {
         }
 
         onEventReceived: (name, data) => {
+            this.eventHandler(name, data);
+        }
+
+        function enqueueUpdate(fn) {
+            this.updateQueue = updateQueue.then(fn).catch(error => console.error(error));
+        }
+
+        function eventHandler(name, data) {
             switch (name) {
-                case "workspacev2":
-                    let id = data.split(",")[0] ?? "";
+                case "focusedmon": {
+                    enqueueUpdate(() => root.updateMonitors());
+                    break;
+                }
 
-                    let workspacesRequest = (workspacesCommand, workspacesData) => {
-                        if (workspacesCommand !== "j/workspaces") return;
+                case "monitoradded": {
+                    enqueueUpdate(() => root.updateMonitors());
+                    break;
+                }
 
-                        requests.finished.disconnect(workspacesRequest);
-
-                        Ipc.compositor.monitors.forEach(m => {
-                            m.workspaces = workspacesData
-                                .filter(w => w.monitorID === m.monitorId)
-                                .map(w => workspaceFactory.createObject(null, {
-                                    workspaceId: w.id,
-                                    name: w.name,
-                                    special: w.name === "special:magic",
-                                    fullscreen: w.hasfullscreen,
-                                    active: w.id === parseInt(id)
-                                }));
-                            m.workspace = m.workspaces.find(w => w.active) || null;
-                        });
-
-                        let surfacesRequest = (surfacesCommand, surfacesData) => {
-                            if (surfacesCommand !== "j/clients") return;
-
-                            requests.finished.disconnect(surfacesRequest)
-
-                            Ipc.compositor.monitors.forEach(m => {
-                                m.workspaces.forEach(w => {
-                                    w.surfaces = surfacesData
-                                        .filter(s => s.workspace.id === w.workspaceId)
-                                        .map(s => surfaceFactory.createObject(null, {
-                                            surfaceId: s.address,
-                                            title: s.title,
-                                            fullscreen: s.fullscreen === 1,
-                                            active: workspacesData.find(wd => wd.id === w.workspaceId && wd.lastwindow === s.address) !== undefined
-                                        }));
-                                    w.surface = w.surfaces.find(s => s.active) || null;
-                                });
-                            });
-                        }
-
-                        requests.request("j/clients");
-                        requests.finished.connect(surfacesRequest);
+                case "monitorremovedv2": {
+                    const [monitorId] = data.split(",");
+                    let index = Ipc.compositor.monitors.findIndex(m => m.monitorId === monitorId);
+                    if (index >= 0) {
+                        Ipc.compositor.monitors.splice(index, 1);
+                        Ipc.compositor.monitorCount = Ipc.compositor.monitors.length;
                     }
-
-                    requests.request("j/workspaces");
-                    requests.finished.connect(workspacesRequest);
                     break;
+                }
 
-                case "monitoraddedv2":
+                case "workspace": {
+                    enqueueUpdate(() => root.updateMonitors().then(root.updateWorkspaces));
                     break;
+                }
 
-                case "monitorremovedv2":
+                case "activespecial": {
+                    enqueueUpdate(() => root.updateMonitors().then(root.updateWorkspaces));
                     break;
+                }
+
+                case "renameworkspace": {
+                    enqueueUpdate(() => root.updateWorkspaces());
+                    break;
+                }
+
+                case "openwindow": {
+                    enqueueUpdate(() => root.updateSurfaces());
+                    break;
+                }
+
+                case "closewindow": {
+                    const [surfaceId] = data.split(",");
+                    Ipc.compositor.monitors.forEach(m =>
+                        m.workspaces.forEach(w => {
+                            let index = w.surfaces.findIndex(s => s.surfaceId === `0x${surfaceId}`);
+                            if (index >= 0) {
+                                w.surfaces.splice(index, 1);
+                                w.surfaceCount = w.surfaces.length;
+                            }
+                        })
+                    );
+                    break;
+                }
+
+                case "activewindowv2": {
+                    const [surfaceId] = data.split(",");
+                    Ipc.compositor.monitors.forEach(m =>
+                        m.workspaces.forEach(w => {
+                            w.surfaces.forEach(s => {
+                                if (s.surfaceId === `0x${surfaceId}`) {
+                                    s.urgent = false;
+                                    w.urgent = false;
+                                }
+                                s.active = s.surfaceId === `0x${surfaceId}`;
+                            });
+                            w.surface = w.surfaces.find(s => s.active) || null;
+                        })
+                    );
+                    break;
+                }
+
+                case "fullscreen": {
+                    const [fullscreen] = data.split(",");
+                    Ipc.compositor.monitor.workspace.fullscreen = fullscreen === "1";
+                    Ipc.compositor.monitor.workspace.surface.fullscreen = fullscreen === "1";
+                    break;
+                }
+
+                case "urgent": {
+                    const [surfaceId] = data.split(",");
+                    Ipc.compositor.monitors.forEach(m =>
+                        m.workspaces.forEach(w =>
+                            w.surfaces.forEach(s => {
+                                if (s.surfaceId === `0x${surfaceId}`) {
+                                    s.urgent = true;
+                                    w.urgent = true;
+                                }
+                            })
+                        )
+                    );
+                    break;
+                }
+
+                case "windowtitlev2": {
+                    const [surfaceId, surfaceName] = data.split(",");
+                    Ipc.compositor.monitors.forEach(m =>
+                        m.workspaces.forEach(w =>
+                            w.surfaces.forEach(s => {
+                                if (s.surfaceId === `0x${surfaceId}`) {
+                                    s.title = surfaceName;
+                                }
+                            })
+                        )
+                    );
+                    break;
+                }
             }
         }
     }
@@ -172,23 +273,26 @@ Singleton {
             }
         }
 
-        onConnectedChanged: if (connected) {
-            write(command);
-            flush();
-        } else {
+        onConnectedChanged: {
+            if (this.connected) {
+                write(this.command);
+                flush();
+                return;
+            }
+
             let data = null;
 
             try {
-                data = JSON.parse(output)
+                data = JSON.parse(this.output);
             } catch (error) {}
 
-            finished(command, data);
+            finished(this.command, data);
         }
 
-        function request(request: string) {
-            output = "";
-            command = request;
-            connected = true;
+        function request(request) {
+            this.output = "";
+            this.command = request;
+            this.connected = true;
         }
     }
 
