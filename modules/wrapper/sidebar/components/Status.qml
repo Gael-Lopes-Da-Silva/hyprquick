@@ -14,12 +14,12 @@ Loader {
     visible: true
     sourceComponent: ColumnLayout {
         Rectangle {
-            radius: Config.general.sidebar.status.radius
+            radius: Config.appearance.sidebar.status.radius
             color: Config.appearance.sidebar.status.background
 
             Layout.alignment: Qt.AlignCenter
             Layout.preferredHeight: statusColumn.height
-            Layout.preferredWidth: Config.general.sidebar.status.size
+            Layout.preferredWidth: Config.appearance.sidebar.status.size
 
             ColumnLayout {
                 id: statusColumn
@@ -35,17 +35,17 @@ Loader {
 
                         Rectangle {
                             color: "transparent"
-                            radius: Config.general.sidebar.status.radius
+                            radius: Config.appearance.sidebar.status.radius
 
                             anchors {
                                 fill: parent
-                                margins: Config.general.sidebar.status.button.margin
+                                margins: Config.appearance.sidebar.status.button.margin
                             }
 
                             Icon {
                                 icon: Globals.icons.wifi_fill
                                 color: Config.appearance.sidebar.status.button.color
-                                size: Config.general.sidebar.status.button.iconSize
+                                size: Config.appearance.sidebar.status.button.iconSize
 
                                 anchors {
                                     centerIn: parent
@@ -68,8 +68,8 @@ Loader {
                     }
 
                     Layout.alignment: Qt.AlignCenter
-                    Layout.preferredHeight: Config.general.sidebar.status.size
-                    Layout.preferredWidth: Config.general.sidebar.status.size
+                    Layout.preferredHeight: Config.appearance.sidebar.status.size
+                    Layout.preferredWidth: Config.appearance.sidebar.status.size
                 }
 
                 Loader {
@@ -82,17 +82,17 @@ Loader {
 
                         Rectangle {
                             color: "transparent"
-                            radius: Config.general.sidebar.status.radius
+                            radius: Config.appearance.sidebar.status.radius
 
                             anchors {
                                 fill: parent
-                                margins: Config.general.sidebar.status.button.margin
+                                margins: Config.appearance.sidebar.status.button.margin
                             }
 
                             Icon {
                                 icon: Globals.icons.bluetooth_fill
                                 color: Config.appearance.sidebar.status.button.color
-                                size: Config.general.sidebar.status.button.iconSize
+                                size: Config.appearance.sidebar.status.button.iconSize
 
                                 anchors {
                                     centerIn: parent
@@ -115,8 +115,8 @@ Loader {
                     }
 
                     Layout.alignment: Qt.AlignCenter
-                    Layout.preferredHeight: Config.general.sidebar.status.size
-                    Layout.preferredWidth: Config.general.sidebar.status.size
+                    Layout.preferredHeight: Config.appearance.sidebar.status.size
+                    Layout.preferredWidth: Config.appearance.sidebar.status.size
                 }
 
                 Loader {
@@ -129,17 +129,17 @@ Loader {
 
                         Rectangle {
                             color: "transparent"
-                            radius: Config.general.sidebar.status.radius
+                            radius: Config.appearance.sidebar.status.radius
 
                             anchors {
                                 fill: parent
-                                margins: Config.general.sidebar.status.button.margin
+                                margins: Config.appearance.sidebar.status.button.margin
                             }
 
                             Icon {
                                 icon: Globals.icons.battery_fill
                                 color: Config.appearance.sidebar.status.button.color
-                                size: Config.general.sidebar.status.button.iconSize
+                                size: Config.appearance.sidebar.status.button.iconSize
 
                                 anchors {
                                     centerIn: parent
@@ -162,10 +162,11 @@ Loader {
                     }
 
                     Layout.alignment: Qt.AlignCenter
-                    Layout.preferredHeight: Config.general.sidebar.status.size
-                    Layout.preferredWidth: Config.general.sidebar.status.size
+                    Layout.preferredHeight: Config.appearance.sidebar.status.size
+                    Layout.preferredWidth: Config.appearance.sidebar.status.size
                 }
             }
         }
     }
 }
+

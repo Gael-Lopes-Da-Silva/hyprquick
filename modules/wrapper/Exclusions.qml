@@ -8,6 +8,8 @@ import qs.services
 Item {
     required property var screen
 
+    id: root
+
     component ExclusionZone: PanelWindow {
         screen: root.screen
         implicitWidth: 0
@@ -18,10 +20,8 @@ Item {
         WlrLayershell.namespace: Globals.appId + "_exclusions"
     }
 
-    id: root
-
     ExclusionZone {
-        exclusiveZone: Config.general.wrapper.implicitSize
+        exclusiveZone: Config.appearance.wrapper.implicitSize
 
         anchors {
             top: true
@@ -29,7 +29,9 @@ Item {
     }
 
     ExclusionZone {
-        exclusiveZone: States.showSidebar ? Config.general.sidebar.implicitSize : Config.general.wrapper.implicitSize
+        exclusiveZone: States.showSidebar
+            ? Config.appearance.sidebar.implicitSize
+            : Config.appearance.wrapper.implicitSize
 
         anchors {
             left: true
@@ -37,7 +39,7 @@ Item {
     }
 
     ExclusionZone {
-        exclusiveZone: Config.general.wrapper.implicitSize
+        exclusiveZone: Config.appearance.wrapper.implicitSize
 
         anchors {
             right: true
@@ -45,7 +47,7 @@ Item {
     }
 
     ExclusionZone {
-        exclusiveZone: Config.general.wrapper.implicitSize
+        exclusiveZone: Config.appearance.wrapper.implicitSize
 
         anchors {
             bottom: true

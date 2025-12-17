@@ -7,7 +7,7 @@ import Quickshell
 import qs.configs
 import qs.components.ipc
 
-import "ipc" as Ipc
+import qs.services.ipc as Ipc
 
 Singleton {
     id: root

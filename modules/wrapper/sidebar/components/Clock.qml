@@ -15,25 +15,25 @@ Loader {
     visible: true
     sourceComponent: ColumnLayout {
         Rectangle {
-            radius: Config.general.sidebar.clock.radius
+            radius: Config.appearance.sidebar.clock.radius
             color: Config.appearance.sidebar.clock.background
 
             Layout.alignment: Qt.AlignCenter
             Layout.preferredHeight: clockColumn.height
-            Layout.preferredWidth: Config.general.sidebar.clock.size
+            Layout.preferredWidth: Config.appearance.sidebar.clock.size
 
             Rectangle {
                 color: "transparent"
-                radius: Config.general.sidebar.clock.radius
+                radius: Config.appearance.sidebar.clock.radius
 
                 anchors {
                     fill: parent
-                    margins: Config.general.sidebar.clock.button.margin
+                    margins: Config.appearance.sidebar.clock.button.margin
                 }
 
                 ColumnLayout {
                     id: clockColumn
-                    spacing: Config.general.sidebar.clock.spacing
+                    spacing: Config.appearance.sidebar.clock.spacing
 
                     anchors {
                         centerIn: parent
@@ -41,13 +41,13 @@ Loader {
 
                     Item {
                         Layout.alignment: Qt.AlignCenter
-                        Layout.preferredWidth: Config.general.sidebar.clock.size
-                        Layout.preferredHeight: Config.general.sidebar.clock.size
+                        Layout.preferredWidth: Config.appearance.sidebar.clock.size
+                        Layout.preferredHeight: Config.appearance.sidebar.clock.size
 
                         Icon {
                             icon: Globals.icons.time_fill
                             color: Config.appearance.sidebar.clock.button.iconColor
-                            size: Config.general.sidebar.clock.button.iconSize
+                            size: Config.appearance.sidebar.clock.button.iconSize
 
                             anchors {
                                 centerIn: parent
@@ -58,7 +58,7 @@ Loader {
 
                     Item {
                         Layout.alignment: Qt.AlignCenter
-                        Layout.preferredWidth: Config.general.sidebar.clock.size
+                        Layout.preferredWidth: Config.appearance.sidebar.clock.size
                         Layout.preferredHeight: clockHoursText.height
                         Layout.bottomMargin: 8
 
@@ -78,7 +78,7 @@ Loader {
                                 return Qt.formatDateTime(clockHours.date, time);
                             }
                             color: Config.appearance.sidebar.clock.button.color
-                            font.pointSize: Config.general.sidebar.clock.button.fontSize
+                            font.pointSize: Config.appearance.sidebar.clock.button.fontSize
 
                             anchors {
                                 centerIn: parent
@@ -87,7 +87,9 @@ Loader {
 
                             SystemClock {
                                 id: clockHours
-                                precision: Config.general.sidebar.clock.showSeconds ? SystemClock.Seconds : SystemClock.Minutes
+                                precision: Config.general.sidebar.clock.showSeconds
+                                    ? SystemClock.Seconds
+                                    : SystemClock.Minutes
                             }
                         }
                     }

@@ -14,26 +14,26 @@ Loader {
     visible: true
     sourceComponent: ColumnLayout {
         Rectangle {
-            radius: Config.general.sidebar.power.radius
+            radius: Config.appearance.sidebar.power.radius
             color: Config.appearance.sidebar.power.background
 
             Layout.alignment: Qt.AlignCenter
-            Layout.preferredHeight: Config.general.sidebar.power.size
-            Layout.preferredWidth: Config.general.sidebar.power.size
+            Layout.preferredHeight: Config.appearance.sidebar.power.size
+            Layout.preferredWidth: Config.appearance.sidebar.power.size
 
             Rectangle {
                 color: "transparent"
-                radius: Config.general.sidebar.power.radius
+                radius: Config.appearance.sidebar.power.radius
 
                 anchors {
                     fill: parent
-                    margins: Config.general.sidebar.power.button.margin
+                    margins: Config.appearance.sidebar.power.button.margin
                 }
 
                 Icon {
                     icon: Globals.icons.power_fill
                     color: Config.appearance.sidebar.power.button.color
-                    size: Config.general.sidebar.power.button.iconSize
+                    size: Config.appearance.sidebar.power.button.iconSize
 
                     anchors {
                         centerIn: parent

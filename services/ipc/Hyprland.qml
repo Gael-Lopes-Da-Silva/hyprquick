@@ -12,7 +12,7 @@ Singleton {
     id: root
 
     function initialize() {
-        this.updateMonitors().then(updateWorkspaces).then(updateSurfaces);
+        updateMonitors().then(updateWorkspaces).then(updateSurfaces);
 
         events.connected = true;
     }
@@ -23,6 +23,7 @@ Singleton {
                 Ipc.compositor.monitors,
                 data.map(m => ({
                     monitorId: m.id.toString(),
+                    name: m.name,
                     width: m.width,
                     height: m.height,
                     scale: m.scale,
@@ -47,7 +48,6 @@ Singleton {
                         name: w.name,
                         special: w.name === "special:magic",
                         fullscreen: w.hasfullscreen,
-                        surfaceCount: w.windows,
                         active: m.activeWorkspaceId === w.id.toString(),
                         activeSurfaceId: w.lastwindow
                     })),
@@ -138,14 +138,6 @@ Singleton {
         }
 
         onEventReceived: (name, data) => {
-            this.eventHandler(name, data);
-        }
-
-        function enqueueUpdate(fn) {
-            this.updateQueue = updateQueue.then(fn).catch(error => console.error(error));
-        }
-
-        function eventHandler(name, data) {
             switch (name) {
                 case "focusedmon": {
                     enqueueUpdate(() => root.updateMonitors());
@@ -255,6 +247,10 @@ Singleton {
                 }
             }
         }
+
+        function enqueueUpdate(fn) {
+            updateQueue = updateQueue.then(fn).catch(error => console.error(error));
+        }
     }
 
     Socket {
@@ -274,25 +270,22 @@ Singleton {
         }
 
         onConnectedChanged: {
-            if (this.connected) {
-                write(this.command);
+            if (connected) {
+                write(command);
                 flush();
                 return;
             }
 
-            let data = null;
-
             try {
-                data = JSON.parse(this.output);
+                const data = JSON.parse(output);
+                finished(command, data);
+                output = "";
             } catch (error) {}
-
-            finished(this.command, data);
         }
 
         function request(request) {
-            this.output = "";
-            this.command = request;
-            this.connected = true;
+            command = request;
+            connected = true;
         }
     }
 

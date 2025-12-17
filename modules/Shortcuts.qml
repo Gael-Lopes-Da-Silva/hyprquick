@@ -4,7 +4,7 @@ import Quickshell.Io
 
 import qs.services
 
-Item {
+Scope {
     id: root
 
     IpcHandler {

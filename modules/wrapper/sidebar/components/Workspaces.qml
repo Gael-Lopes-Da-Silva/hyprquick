@@ -13,21 +13,21 @@ Loader {
     active: true
     visible: true
     sourceComponent: ColumnLayout {
-        spacing: Config.general.sidebar.workspaces.spacing
+        spacing: Config.appearance.sidebar.workspaces.spacing
 
         Rectangle {
-            radius: Config.general.sidebar.workspaces.windowCount.radius
+            radius: Config.appearance.sidebar.workspaces.windowCount.radius
             color: Config.appearance.sidebar.workspaces.windowCount.background
 
             Layout.alignment: Qt.AlignCenter
-            Layout.preferredHeight: Config.general.sidebar.workspaces.windowCount.size
-            Layout.preferredWidth: Config.general.sidebar.workspaces.windowCount.size
+            Layout.preferredHeight: Config.appearance.sidebar.workspaces.windowCount.size
+            Layout.preferredWidth: Config.appearance.sidebar.workspaces.windowCount.size
 
             Icon {
                 visible: Ipc.compositor.monitor?.workspace?.surfaceCount <= 0
                 icon: Globals.icons.layout_3_fill
                 color: Config.appearance.sidebar.workspaces.windowCount.color
-                size: Config.general.sidebar.workspaces.windowCount.iconSize
+                size: Config.appearance.sidebar.workspaces.windowCount.iconSize
 
                 anchors {
                     centerIn: parent
@@ -39,7 +39,7 @@ Loader {
                 visible: Ipc.compositor.monitor?.workspace?.surfaceCount > 0
                 text: Ipc.compositor.monitor?.workspace?.surfaceCount ?? ""
                 color: Config.appearance.sidebar.workspaces.windowCount.color
-                font.pointSize: Config.general.sidebar.workspaces.windowCount.fontSize
+                font.pointSize: Config.appearance.sidebar.workspaces.windowCount.fontSize
 
                 anchors {
                     centerIn: parent
@@ -49,15 +49,15 @@ Loader {
         }
 
         Rectangle {
-            radius: Config.general.sidebar.workspaces.indicators.radius
+            radius: Config.appearance.sidebar.workspaces.indicators.radius
             color: Config.appearance.sidebar.workspaces.indicators.background
 
             Layout.alignment: Qt.AlignCenter
-            Layout.preferredWidth: Config.general.sidebar.workspaces.indicators.size
-            Layout.preferredHeight: (Config.general.sidebar.workspaces.indicators.size * (Ipc.compositor.monitor?.workspaceCount ?? 1)) + (Config.general.sidebar.workspaces.indicators.spacing * ((Ipc.compositor.monitor?.workspaceCount ?? 1) - 1))
+            Layout.preferredWidth: Config.appearance.sidebar.workspaces.indicators.size
+            Layout.preferredHeight: (Config.appearance.sidebar.workspaces.indicators.size * (Ipc.compositor.monitor?.workspaceCount ?? 1)) + (Config.appearance.sidebar.workspaces.indicators.spacing * ((Ipc.compositor.monitor?.workspaceCount ?? 1) - 1))
 
             ColumnLayout {
-                spacing: Config.general.sidebar.workspaces.indicators.spacing
+                spacing: Config.appearance.sidebar.workspaces.indicators.spacing
 
                 anchors {
                     centerIn: parent
@@ -68,8 +68,8 @@ Loader {
 
                     Item {
                         Layout.alignment: Qt.AlignCenter
-                        Layout.preferredWidth: Config.general.sidebar.workspaces.indicators.size
-                        Layout.preferredHeight: Config.general.sidebar.workspaces.indicators.size
+                        Layout.preferredWidth: Config.appearance.sidebar.workspaces.indicators.size
+                        Layout.preferredHeight: Config.appearance.sidebar.workspaces.indicators.size
 
                         Rectangle {
                             color: {
@@ -81,11 +81,11 @@ Loader {
                                     return Config.appearance.sidebar.workspaces.indicators.indicator.background;
                                 }
                             }
-                            radius: Config.general.sidebar.workspaces.indicators.radius
+                            radius: Config.appearance.sidebar.workspaces.indicators.radius
 
                             anchors {
                                 fill: parent
-                                margins: Config.general.sidebar.workspaces.indicators.indicator.margin
+                                margins: Config.appearance.sidebar.workspaces.indicators.indicator.margin
                             }
 
                             Loader {
@@ -95,7 +95,7 @@ Loader {
                                     visible: !modelData.special
                                     text: modelData.name
                                     color: Config.appearance.sidebar.workspaces.indicators.indicator.color
-                                    font.pointSize: Config.general.sidebar.workspaces.indicators.indicator.fontSize
+                                    font.pointSize: Config.appearance.sidebar.workspaces.indicators.indicator.fontSize
                                 }
 
                                 anchors {
@@ -110,7 +110,7 @@ Loader {
                                 sourceComponent: Icon {
                                     icon: Globals.icons.asterisk_fill
                                     color: Config.appearance.sidebar.workspaces.indicators.indicator.specialColor
-                                    font.pointSize: Config.general.sidebar.workspaces.indicators.indicator.specialFontSize
+                                    font.pointSize: Config.appearance.sidebar.workspaces.indicators.indicator.specialFontSize
                                 }
 
                                 anchors {
@@ -125,3 +125,4 @@ Loader {
         }
     }
 }
+

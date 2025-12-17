@@ -15,15 +15,15 @@ Loader {
     active: States.showSidebar
     visible: States.showSidebar
     sourceComponent: Item {
-        implicitWidth: Config.general.sidebar.implicitSize
+        implicitWidth: Config.appearance.sidebar.implicitSize
 
         ColumnLayout {
-            spacing: Config.general.sidebar.spacing
+            spacing: Config.appearance.sidebar.spacing
 
             anchors {
                 top: parent.top
                 horizontalCenter: parent.horizontalCenter
-                topMargin: Config.general.sidebar.topMargin
+                topMargin: Config.appearance.sidebar.topMargin
             }
 
             Workspaces {
@@ -34,12 +34,12 @@ Loader {
         }
 
         ColumnLayout {
-            spacing: Config.general.sidebar.spacing
+            spacing: Config.appearance.sidebar.spacing
 
             anchors {
                 bottom: parent.bottom
                 horizontalCenter: parent.horizontalCenter
-                bottomMargin: Config.general.sidebar.bottomMargin
+                bottomMargin: Config.appearance.sidebar.bottomMargin
             }
 
             SystemTray {
@@ -68,3 +68,4 @@ Loader {
         }
     }
 }
+

@@ -16,12 +16,12 @@ Loader {
     visible: true
     sourceComponent: ColumnLayout {
         Rectangle {
-            radius: Config.general.sidebar.systemTray.radius
+            radius: Config.appearance.sidebar.systemTray.radius
             color: Config.appearance.sidebar.systemTray.background
 
             Layout.alignment: Qt.AlignCenter
             Layout.preferredHeight: systemTrayColumn.height
-            Layout.preferredWidth: Config.general.sidebar.systemTray.size
+            Layout.preferredWidth: Config.appearance.sidebar.systemTray.size
 
             ColumnLayout {
                 id: systemTrayColumn
@@ -32,21 +32,21 @@ Loader {
 
                     Item {
                         Layout.alignment: Qt.AlignCenter
-                        Layout.preferredHeight: Config.general.sidebar.systemTray.size
-                        Layout.preferredWidth: Config.general.sidebar.systemTray.size
+                        Layout.preferredHeight: Config.appearance.sidebar.systemTray.size
+                        Layout.preferredWidth: Config.appearance.sidebar.systemTray.size
 
                         Rectangle {
                             color: "transparent"
-                            radius: Config.general.sidebar.systemTray.radius
+                            radius: Config.appearance.sidebar.systemTray.radius
 
                             anchors {
                                 fill: parent
-                                margins: Config.general.sidebar.systemTray.button.margin
+                                margins: Config.appearance.sidebar.systemTray.button.margin
                             }
 
                             IconImage {
-                                implicitWidth: Config.general.sidebar.systemTray.button.iconSize
-                                implicitHeight: Config.general.sidebar.systemTray.button.iconSize
+                                implicitWidth: Config.appearance.sidebar.systemTray.button.iconSize
+                                implicitHeight: Config.appearance.sidebar.systemTray.button.iconSize
                                 source: {
                                     if (modelData.icon.includes("?path=")) {
                                         const [name, path] = modelData.icon.split("?path=");
@@ -88,3 +88,4 @@ Loader {
         }
     }
 }
+

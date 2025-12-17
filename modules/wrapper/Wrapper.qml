@@ -5,7 +5,7 @@ import Quickshell.Wayland
 
 import qs.configs
 import qs.services
-import qs.modules.sidebar
+import qs.modules.wrapper.sidebar
 
 Loader {
     id: root
@@ -14,7 +14,7 @@ Loader {
     sourceComponent: Variants {
         model: Quickshell.screens
 
-        Scope {
+        Item {
             required property var modelData
 
             id: wrapper
@@ -22,6 +22,15 @@ Loader {
             PanelWindow {
                 screen: wrapper.modelData
                 color: "transparent"
+                mask: Region {
+                    item: mask
+                    intersection: Intersection.Subtract
+
+                    Region {
+                        item: States.showSidebar ? sidebar : null
+                        intersection: Intersection.Xor
+                    }
+                }
 
                 WlrLayershell.namespace: Globals.appId + "_wrapper"
                 WlrLayershell.exclusionMode: ExclusionMode.Ignore
@@ -33,23 +42,13 @@ Loader {
                     bottom: true
                 }
 
-                mask: Region {
-                    item: mask
-                    intersection: Intersection.Xor
-
-                    regions: [
-                        Region {
-                            item: States.showSidebar ? sidebar : null
-                            intersection: Intersection.Xor
-                        }
-                    ]
-                }
-
                 Item {
                     layer.enabled: true
                     layer.effect: MultiEffect {
-                        shadowEnabled: Config.general.wrapper.shadow.enabled
-                        blurMax: Config.general.wrapper.shadow.maxBlur
+                        shadowEnabled: Config.appearance.wrapper.shadow.enabled
+                        shadowOpacity: Config.appearance.wrapper.shadow.opacity
+                        shadowColor: Config.appearance.wrapper.shadow.color
+                        shadowBlur: Config.appearance.wrapper.shadow.blur
                     }
 
                     anchors {
@@ -63,8 +62,6 @@ Loader {
                             maskSource: mask
                             maskEnabled: true
                             maskInverted: true
-                            maskThresholdMin: 0.5
-                            maskSpreadAtMin: 1
                         }
 
                         anchors {
@@ -83,12 +80,14 @@ Loader {
                     }
 
                     Rectangle {
-                        radius: Config.general.wrapper.radius
+                        radius: Config.appearance.wrapper.radius
 
                         anchors {
                             fill: parent
-                            margins: Config.general.wrapper.implicitSize
-                            leftMargin: States.showSidebar ? Config.general.sidebar.implicitSize : Config.general.wrapper.implicitSize
+                            margins: Config.appearance.wrapper.implicitSize
+                            leftMargin: States.showSidebar
+                                ? Config.appearance.sidebar.implicitSize
+                                : Config.appearance.wrapper.implicitSize
                         }
                     }
                 }
@@ -119,3 +118,4 @@ Loader {
         }
     }
 }
+

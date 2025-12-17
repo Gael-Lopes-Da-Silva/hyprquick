@@ -3,7 +3,6 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import Quickshell
-import Quickshell.Hyprland
 
 Singleton {
     id: root
@@ -3113,4 +3112,7 @@ Singleton {
         zoom_out_fill: "\uf51c",
         zoom_out_line: "\uf51d"
     })
+    readonly property var iconsFont: FontLoader {
+        source: Quickshell.shellDir + "/assets/fonts/MingCute.ttf"
+    }
 }
